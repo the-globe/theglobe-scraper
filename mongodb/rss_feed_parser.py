@@ -53,7 +53,14 @@ def rss_feed_parser(feed_url):
         post_url = post.links[0]["href"]
 
         # Universalize time
-        time_posted = datetime.datetime(post.published_parsed.tm_year, post.published_parsed.tm_mon, post.published_parsed.tm_mday, post.published_parsed.tm_hour, post.published_parsed.tm_min, post.published_parsed.tm_sec)
+        try: 
+            time_posted = datetime.datetime(post.published_parsed.tm_year, post.published_parsed.tm_mon, post.published_parsed.tm_mday, post.published_parsed.tm_hour, post.published_parsed.tm_min, post.published_parsed.tm_sec)
+        except AttributeError:
+            try: 
+                time_posted = post.published
+            except AttributeError:
+                time_posted = "N/A"
+
         time_added = datetime.datetime.now()
 
         post_json = {
