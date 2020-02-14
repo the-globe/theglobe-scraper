@@ -32,7 +32,7 @@ def rss_feed_parser(feed_url):
         try:
             #TODO: fix seguir leyendo
             post_content = post.content[0]["value"]
-        except AttributeError:
+        except IndexError:
             # TODO GET CONTENT MANUALLY THROUGH HTML PARSE
             post_content = "N/A"
 
@@ -71,6 +71,9 @@ def rss_feed_parser(feed_url):
         post_json_list.append(post_json)
 
     return post_json_list
+
+# if __name__ == '__main__':
+#     print(rss_feed_parser('https://elpais.com/rss/elpais/inenglish.xml'))
 
 # TODO:
 # parse html of article and get text
