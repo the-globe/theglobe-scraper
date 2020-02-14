@@ -28,9 +28,15 @@ def rss_feed_parser(feed_url):
         except AttributeError:
             post_author = "N/A"
 
+        # Tries to get post summary
+        try:
+            post_summary = post.summary
+        except AttributeError:
+            post_summary = "N/A"
+
         # Tries to get content
         try:
-            #TODO: fix seguir leyendo
+            #TODO: fix "seguir leyendo"
             post_content = post.content[0]["value"]
         except AttributeError:
             # TODO GET CONTENT MANUALLY THROUGH HTML PARSE
@@ -55,7 +61,7 @@ def rss_feed_parser(feed_url):
             "author": post_author,
             "title": post.title,
             "title_detail": post.title_detail.value,
-            "summary": post.summary,
+            "summary": post_summary,
             "content": post_content,
             "tags": "placeholder",
             "url": post_url,
