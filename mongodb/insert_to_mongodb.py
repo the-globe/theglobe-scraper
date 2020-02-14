@@ -58,7 +58,7 @@ def insert_articles(collection, checked_articles):
         print(type(err))
         print('An error accured: ', err)
     else:
-        print("\nInserted Id's: ", result.acknowledged, "\n")
+        print("\nInserted ID's: ", result.inserted_ids, "\n")
         return result
 
 
