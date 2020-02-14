@@ -32,14 +32,14 @@ def rss_feed_parser(feed_url):
         try:
             #TODO: fix seguir leyendo
             post_content = post.content[0]["value"]
-        except IndexError:
+        except AttributeError:
             # TODO GET CONTENT MANUALLY THROUGH HTML PARSE
             post_content = "N/A"
 
         # Tries to get post image
         try:
             post_img = post.links[1]["href"]
-        except AttributeError:
+        except (AttributeError, IndexError):
             #TODO get image manually
             post_img = "N/A"
 
