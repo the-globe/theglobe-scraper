@@ -29,16 +29,12 @@ def get_articles():
     Take articles from Scraper Class
     return scraped_articles
     """
-    try:
-        """Get articles"""
-        scraped_articles = parser('https://elpais.com/rss/elpais/inenglish.xml')
-        # if len(scraped_articles['articles']) == 0:
-        #     raise KeyError("There are no articles!")
-    except Exception as err:
-        print(type(err))
-        print('An error accured: ', err)
-    else:
-        return(scraped_articles)
+    """Get articles"""
+    scraped_articles = {'articles':[]}
+    for newspaper in ['http://feeds.bbci.co.uk/news/england/london/rss.xml', 'https://www.spiegel.de/international/index.rss', 'https://elpais.com/rss/elpais/inenglish.xml', 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml', 'http://rss.cnn.com/rss/edition.rss', 'http://rss.cnn.com/rss/cnn_topstories.rss', 'http://rssfeeds.usatoday.com/usatoday-NewsTopStories', 'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms', 'https://feeds.a.dj.com/rss/RSSWorldNews.xml', 'https://www.rt.com/rss/news/', 'https://www.latimes.com/world/rss2.0.xml', 'https://www.buzzfeed.com/world.xml', 'http://www.aljazeera.com/xml/rss/all.xml', 'https://www.cbc.ca/cmlink/rss-world', 'http://www.independent.co.uk/news/world/rss', 'http://feeds.reuters.com/Reuters/worldNews']:
+
+        scraped_articles['articles'].append(parser(newspaper)[0])
+    return(scraped_articles)
 
 def check_date(scraped_articles):
     """Not clear, yet"""
@@ -63,23 +59,17 @@ def insert_articles(collection, checked_articles):
 
 
 if __name__ == '__main__':
-    try:
-        """Initialize Database"""
-        client, db, collection = initilize_db(URL, DB, COLLECTION)
+    """Initialize Database"""
+    client, db, collection = initilize_db(URL, DB, COLLECTION)
 
-        """Get the articles"""
-        scraped_articles = get_articles()
+    """Get the articles"""
+    scraped_articles = get_articles()
 
-        """Check the Date of the articles"""
-        checked_articles = check_date(scraped_articles)
+    """Check the Date of the articles"""
+    checked_articles = check_date(scraped_articles)
 
-        """Insert the articles and get the result (Mongo id's)"""
-        result = insert_articles(collection, checked_articles)
+    """Insert the articles and get the result (Mongo id's)"""
+    result = insert_articles(collection, checked_articles)
 
-    except Exception as err:
-        print(type(err))
-        print('An error accured: ', err)
-        print("Script terminated because of an Exception")
-    else:
-        serverStatusResult = db.command("serverStatus")
-        pprint(serverStatusResult)
+    serverStatusResult = db.command("serverStatus")
+    pprint(serverStatusResult)

@@ -65,6 +65,7 @@ def rss_feed_parser(feed_url):
             "score": "placeholder"
         }
 
+
         #print(post_json)
 
         post_json_list.append(post_json)
