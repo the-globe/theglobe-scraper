@@ -92,8 +92,8 @@ def rss_feed_parser(feed_url):
 
     return post_json_list
 
-# if __name__ == '__main__':
-#     print(rss_feed_parser('https://elpais.com/rss/elpais/inenglish.xml'))
+if __name__ == '__main__':
+    print(rss_feed_parser('https://elpais.com/rss/elpais/inenglish.xml'))
 
 """
 TODO:
