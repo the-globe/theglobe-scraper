@@ -39,7 +39,7 @@ def rss_feed_parser(feed_url):
         # Tries to get post image
         try:
             post_img = post.links[1]["href"]
-        except AttributeError:
+        except (AttributeError, IndexError):
             #TODO get image manually
             post_img = "N/A"
 
@@ -71,6 +71,9 @@ def rss_feed_parser(feed_url):
         post_json_list.append(post_json)
 
     return post_json_list
+
+# if __name__ == '__main__':
+#     print(rss_feed_parser('https://elpais.com/rss/elpais/inenglish.xml'))
 
 # TODO:
 # parse html of article and get text
