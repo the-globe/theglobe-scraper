@@ -36,7 +36,7 @@ class Insert():
             for item in bwe.details['writeErrors']:
                 item = [item['index'],item['op']['_id']]
                 list_failed_inserts.append(item)
-            self.logger.warning(f"{list_failed_inserts}")
+            self.logger.debug(f"{list_failed_inserts}")
 
             list_of_details = []
             for item in ['writeConcernErrors', 'nInserted', 'nUpserted', 'nMatched', 'nModified', 'nRemoved', 'upserted']:
