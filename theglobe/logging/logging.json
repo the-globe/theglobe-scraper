@@ -1,0 +1,93 @@
+{
+        "version": 1,
+        "disable_existing_loggers": false,
+        "loggers": {
+            "": {
+                "level": "NOTSET"
+        },
+            "__main__": {
+                "level": "DEBUG",
+                "formatter": "info",
+                "handlers": ["debug_console_handler","debug_rotating_file_handler" ,"info_rotating_file_handler","warning_file_handler","error_file_handler"
+            ]
+        },
+            "theglobe.database.insert": {
+                "level": "DEBUG",
+                "formatter": "info",
+                "handlers": ["debug_console_handler","warning_file_handler","error_file_handler"
+            ]
+        },
+            "theglobe.logging.init_logging": {
+                "level": "DEBUG",
+                "formatter": "info",
+                "handlers": ["debug_console_handler","warning_file_handler","error_file_handler"
+            ]
+        },
+            "theglobe.scraper.scrape": {
+                "level": "DEBUG",
+                "formatter": "info",
+                "handlers": ["debug_console_handler","warning_file_handler","error_file_handler"
+            ]
+        },
+            "error_logger": {
+                "level": "ERROR",
+                "formatter": "error",
+                "handlers": ["info_console_handler","debug_console_handler","debug_rotating_file_handler" ,"info_rotating_file_handler","warning_file_handler","error_file_handler"
+            ]
+        }
+    },
+        "handlers": {
+            "debug_console_handler": {
+                "level": "DEBUG",
+                "formatter": "info",
+                "class": "logging.StreamHandler",
+                "stream": "ext://sys.stdout"
+        },
+            "info_console_handler": {
+                "level": "INFO",
+                "formatter": "info",
+                "class": "logging.StreamHandler",
+                "stream": "ext://sys.stdout"
+        },
+            "debug_rotating_file_handler": {
+                "level": "DEBUG",
+                "formatter": "info",
+                "class": "logging.handlers.RotatingFileHandler",
+                "filename": "./theglobe/logging/tmp/debug.log",
+                "mode": "a",
+                "maxBytes": 1048576,
+                "backupCount": 10
+        },
+            "info_rotating_file_handler": {
+                "level": "INFO",
+                "formatter": "info",
+                "class": "logging.handlers.RotatingFileHandler",
+                "filename": "./theglobe/logging/tmp/info.log",
+                "mode": "a",
+                "maxBytes": 1048576,
+                "backupCount": 10
+        },
+            "warning_file_handler": {
+                "level": "WARNING",
+                "formatter": "error",
+                "class": "logging.FileHandler",
+                "filename": "./theglobe/logging/tmp/warning.log",
+                "mode": "a"
+        },
+            "error_file_handler": {
+                "level": "ERROR",
+                "formatter": "error",
+                "class": "logging.FileHandler",
+                "filename": "./theglobe/logging/tmp/error.log",
+                "mode": "a"
+        }
+    },
+        "formatters": {
+        "info": {
+            "format": "%(asctime)s-%(levelname)s-%(name)s: :%(module)s|%(lineno)s: : %(message)s"
+        },
+        "error": {
+            "format": "%(asctime)s-%(levelname)s-%(name)s-%(process)d: :%(module)s|%(lineno)s: : %(message)s"
+        }
+    }
+}

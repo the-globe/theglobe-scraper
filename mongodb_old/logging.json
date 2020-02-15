@@ -1,0 +1,66 @@
+{
+        "version": 1,
+        "disable_existing_loggers": false,
+        "loggers": {
+            "": {
+                "level": "NOTSET"
+        },
+            "basic_logger": {
+                "level": "INFO",
+                "formatter": "info",
+                "handlers": ["debug_console_handler", "info_rotating_file_handler"
+            ]
+        },
+            "failed_insert_logger": {
+                "level": "WARNING",
+                "formatter": "info",
+                "handlers": ["failed_insert_handler"
+            ]
+        },
+            "error_logger": {
+                "level": "ERROR",
+                "formatter": "error",
+                "handlers": ["debug_console_handler","error_file_handler"
+            ]
+        }
+    },
+        "handlers": {
+            "debug_console_handler": {
+                "level": "DEBUG",
+                "formatter": "info",
+                "class": "logging.StreamHandler",
+                "stream": "ext://sys.stdout"
+        },
+            "info_rotating_file_handler": {
+                "level": "INFO",
+                "formatter": "info",
+                "class": "logging.handlers.RotatingFileHandler",
+                "filename": "./tmp/info.log",
+                "mode": "a",
+                "maxBytes": 1048576,
+                "backupCount": 10
+        },
+            "failed_insert_handler": {
+                "level": "WARNING",
+                "formatter": "error",
+                "class": "logging.FileHandler",
+                "filename": "./tmp/failed_insert.log",
+                "mode": "a"
+        },
+            "error_file_handler": {
+                "level": "ERROR",
+                "formatter": "error",
+                "class": "logging.FileHandler",
+                "filename": "./tmp/error.log",
+                "mode": "a"
+        }
+    },
+        "formatters": {
+        "info": {
+            "format": "%(asctime)s-%(levelname)s-%(name)s: :%(module)s|%(lineno)s: : %(message)s"
+        },
+        "error": {
+            "format": "%(asctime)s-%(levelname)s-%(name)s-%(process)d: :%(module)s|%(lineno)s: : %(message)s"
+        }
+    }
+}
