@@ -11,7 +11,7 @@ class Scrape():
 
 
     def _img_finder_(self):
-        """TODO: use HTML parser to get img tag and href attribute""" 
+        """TODO: use HTML parser to get img tag and href attribute"""
         pass
 
 
@@ -42,7 +42,7 @@ class Scrape():
 
         post_json_list = []
 
-        for post in news: 
+        for post in news:
             """ Tries to add an author """
             try:
                 post_author = post.author
@@ -74,10 +74,10 @@ class Scrape():
             post_url = post.links[0]["href"]
 
             """ Universalize time """
-            try: 
+            try:
                 time_posted = datetime.datetime(post.published_parsed.tm_year, post.published_parsed.tm_mon, post.published_parsed.tm_mday, post.published_parsed.tm_hour, post.published_parsed.tm_min, post.published_parsed.tm_sec)
             except AttributeError:
-                try: 
+                try:
                     time_posted = post.published
                 except AttributeError:
                     time_posted = "N/A"
@@ -100,7 +100,7 @@ class Scrape():
             }
 
             post_json_list.append(post_json)
-        
+
         return post_json_list
 
 """
