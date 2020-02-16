@@ -2,7 +2,10 @@ import logging
 import os
 import json
 import logging.config
+import colorlog
 
+
+"""TODO: Set "debug_rotating_file_handler" to only handle DEBUG level logs in logging.json"""
 class InitLogging():
 
         def __init__(self, default_path='logging.json', default_level=logging.INFO, env_key='LOG_CFG'):
@@ -20,8 +23,7 @@ class InitLogging():
                 logging.config.dictConfig(config)
                 logger.debug(f"Logging Config loaded from file: {dir_path}")
 
-                
+
             else:
                 logging.basicConfig(level=default_level)
                 logger.debug(f"Basic Config loaded...")
-

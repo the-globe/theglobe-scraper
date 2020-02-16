@@ -21,7 +21,6 @@ class Insert():
             self.logger.error('An Error araised', exc_info=True)
         else:
             self.logger.info('Database initialized')
-    
 
     def _insert_many_articles_(self, documents):
         """DOCUMENT STRUCTURE: {'articles': [{document},{document},{document}]}"""
@@ -44,6 +43,7 @@ class Insert():
             self.logger.warning(f"{list_of_details}")
 
             self.logger.info(f"Inserted documents: {bwe.details['nInserted']}")
+            """ TODO Differenciate between Failed articles and already stored articles """
             self.logger.info(f"Failed documents: {len(documents['articles']) - bwe.details['nInserted']}")
         else:
             self.logger.info(f"Inserted documents: {len(result.inserted_ids)}")
