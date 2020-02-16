@@ -17,7 +17,7 @@ class Insert():
             self.client = MongoClient(url)
             self.db = self.client[db]
             self.collection = self.db[collection]
-        except Exception as exception:
+        except Exception:
             self.logger.error('An Error araised', exc_info=True)
         else:
             self.logger.info('Database initialized')

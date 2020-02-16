@@ -23,7 +23,7 @@ class Scrape():
                 articles_json_list['articles'].extend(parsed_newspaper)
             else:
                 self.logger.error(f"Paper{url} returned error: " + parsed_newspaper)   
-        self.logger.info(f"\nNews in total found: {len(articles_json_list['articles'])}")
+        self.logger.info(f"News in total found: {len(articles_json_list['articles'])}")
         return articles_json_list
 
 
@@ -35,8 +35,8 @@ class Scrape():
         """ If paper has no name return as error and skip """
         try:
             paper_name = newsfeed.feed.title
-        except Exception as exception:
-            self.logger.error('An Error araised', exc_info=True)
+        except Exception:
+            self.logger.error(f"An Error araised", exc_info=True)
         
         self.logger.info(f'Number of posts in {paper_name}: {str(len(newsfeed.entries))}')
 

@@ -6,19 +6,22 @@ import logging.config
 class InitLogging():
 
         def __init__(self, default_path='logging.json', default_level=logging.INFO, env_key='LOG_CFG'):
-            logger = logging.getLogger(__name__)
-            """Setup logging configuration
+            logger = logging.getLogger(__name__) # theglobe.logging.init_logging
 
-            """
-            dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), default_path)
+            dir_path = os.path.dirname(os.path.realpath(__file__)) # Get path of this file
+
+            if not os.path.exists(os.path.join(dir_path, 'tmp')): # Check if tmp folder exist
+                os.makedirs(os.path.join(dir_path, 'tmp'))
+                
+            config_path = os.path.join(dir_path, default_path)
             value = os.getenv(env_key, None)
             if value:
-                path = value
-            if os.path.exists(dir_path):
-                with open(dir_path, 'rt') as f:
+                config_path = value
+            if os.path.exists(config_path):
+                with open(config_path, 'rt') as f:
                     config = json.load(f)
                 logging.config.dictConfig(config)
-                logger.debug(f"Logging Config loaded from file: {dir_path}")
+                logger.debug(f"Logging Config loaded from file: {config_path}")
 
                 
             else:
