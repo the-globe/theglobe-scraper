@@ -29,25 +29,21 @@ class Insert():
             self.logger.debug(f"Try to insert {len(documents['articles'])} articles.")
             result = self.collection.insert_many(documents['articles'], ordered = False)
         except BulkWriteError as bwe:
-            """
-            TODO Only log errors/warnings when there are actual problems 
-                -> BulkWriteError is not a problem as long as it araises because of unique id/url rejection 
-            """
-            self.logger.debug(f"Insert error accured: {bwe} {type(bwe)}")
 
-            list_failed_inserts = []
-            for item in bwe.details['writeErrors']:
-                item = [item['index'],item['op']['_id']]
-                list_failed_inserts.append(item)
-            self.logger.debug(f"{list_failed_inserts}")
+            duplicated_docs = 0
+            for item in bwe.details['writeErrors']: # Only throws an error if error code is not 11000 (11000 = duplicate)
+                if item['code'] != 11000:
+                    self.logger.error(f"{type(bwe)} -> 'index': {item['index']},'code': {item['code']}, 'errmsg': {item['errmsg']}")
+                else:
+                    duplicated_docs += 1
 
-            list_of_details = []
+            list_details = []
             for item in ['writeConcernErrors', 'nInserted', 'nUpserted', 'nMatched', 'nModified', 'nRemoved', 'upserted']:
-                list_of_details.append(f"{item}:{bwe.details[item]}")
-            self.logger.debug(f"{list_of_details}")
+                list_details.append(f"{item}: {bwe.details[item]}")
+            self.logger.debug(list_details)
 
             self.logger.info(f"Inserted documents: {bwe.details['nInserted']}")
-            """ TODO Differenciate between Failed articles and already stored articles """
-            self.logger.debug(f"Failed documents: {len(documents['articles']) - bwe.details['nInserted']}")
+            self.logger.debug(f"Duplicated documents: {duplicated_docs}")
+            self.logger.debug(f"Failed documents: {len(documents['articles']) - bwe.details['nInserted'] - duplicated_docs}")
         else:
             self.logger.info(f"Inserted documents: {len(result.inserted_ids)}")
