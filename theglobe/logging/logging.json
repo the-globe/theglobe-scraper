@@ -6,39 +6,35 @@
                 "level": "NOTSET"
         },
             "__main__": {
-                "level": "DEBUG",
-                "formatter": "info",
+                "level": "INFO",
                 "handlers": ["console_handler","main_rotating_file_handler", "error_file_handler"
             ]
         },
             "theglobe.database.insert": {
-                "level": "DEBUG",
-                "formatter": "info",
+                "level": "INFO",
                 "handlers": ["console_handler","theglobe_database_insert_rotating_file_handler","error_file_handler"
             ]
         },
             "theglobe.logging.init_logging": {
-                "level": "DEBUG",
-                "formatter": "info",
+                "level": "INFO",
                 "handlers": ["console_handler","theglobe_logging_init_logging_rotating_file_handler","error_file_handler"
             ]
         },
             "theglobe.scraper.scrape": {
-                "level": "DEBUG",
-                "formatter": "info",
+                "level": "INFO",
                 "handlers": ["console_handler","theglobe_scraper_scrape_rotating_file_handler","error_file_handler"
             ]
         }
     },
         "handlers": {
             "console_handler": {
-                "level": "INFO",
+                "level": "DEBUG",
                 "formatter": "default_console",
                 "class": "logging.StreamHandler",
                 "stream": "ext://sys.stdout"
         },
             "main_rotating_file_handler": {
-                "level": "INFO",
+                "level": "DEBUG",
                 "formatter": "default_file",
                 "class": "logging.handlers.RotatingFileHandler",
                 "filename": "./theglobe/logging/tmp/main.log",
@@ -47,7 +43,7 @@
                 "backupCount": 10
         },
             "theglobe_database_insert_rotating_file_handler": {
-                "level": "INFO",
+                "level": "DEBUG",
                 "formatter": "default_file",
                 "class": "logging.handlers.RotatingFileHandler",
                 "filename": "./theglobe/logging/tmp/theglobe_database_insert.log",
@@ -56,7 +52,7 @@
                 "backupCount": 10
         },
             "theglobe_logging_init_logging_rotating_file_handler": {
-                "level": "INFO",
+                "level": "DEBUG",
                 "formatter": "default_file",
                 "class": "logging.handlers.RotatingFileHandler",
                 "filename": "./theglobe/logging/tmp/theglobe_logging_init_logging.log",
@@ -65,7 +61,7 @@
                 "backupCount": 10
         },
             "theglobe_scraper_scrape_rotating_file_handler": {
-                "level": "INFO",
+                "level": "DEBUG",
                 "formatter": "default_file",
                 "class": "logging.handlers.RotatingFileHandler",
                 "filename": "./theglobe/logging/tmp/theglobe_scraper_scrape.log",
