@@ -23,7 +23,7 @@ class Scrape():
                 articles_json_list['articles'].extend(parsed_newspaper)
             else:
                 self.logger.error(f"Paper{url} returned error: " + parsed_newspaper)   
-        self.logger.info(f"News in total found: {len(articles_json_list['articles'])}")
+        self.logger.debug(f"News in total found: {len(articles_json_list['articles'])}")
         return articles_json_list
 
 
@@ -38,7 +38,7 @@ class Scrape():
         except Exception:
             self.logger.error(f"An Error araised", exc_info=True)
         
-        self.logger.info(f'Number of posts in {paper_name}: {str(len(newsfeed.entries))}')
+        self.logger.debug(f'Number of posts in {paper_name}: {str(len(newsfeed.entries))}')
 
         post_json_list = []
 

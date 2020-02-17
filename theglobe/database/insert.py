@@ -26,10 +26,14 @@ class Insert():
         """DOCUMENT STRUCTURE: {'articles': [{document},{document},{document}]}"""
         try:
             # w_0 = collection.with_options(write_concern=WriteConcern(w=0))
-            self.logger.info(f"Try to insert {len(documents['articles'])} articles.")
+            self.logger.debug(f"Try to insert {len(documents['articles'])} articles.")
             result = self.collection.insert_many(documents['articles'], ordered = False)
         except BulkWriteError as bwe:
-            self.logger.warning(f"Insert error accured: {bwe} {type(bwe)}")
+            """
+            TODO Only log errors/warnings when there are actual problems 
+                -> BulkWriteError is not a problem as long as it araises because of unique id/url rejection 
+            """
+            self.logger.debug(f"Insert error accured: {bwe} {type(bwe)}")
 
             list_failed_inserts = []
             for item in bwe.details['writeErrors']:
@@ -40,10 +44,10 @@ class Insert():
             list_of_details = []
             for item in ['writeConcernErrors', 'nInserted', 'nUpserted', 'nMatched', 'nModified', 'nRemoved', 'upserted']:
                 list_of_details.append(f"{item}:{bwe.details[item]}")
-            self.logger.warning(f"{list_of_details}")
+            self.logger.debug(f"{list_of_details}")
 
             self.logger.info(f"Inserted documents: {bwe.details['nInserted']}")
             """ TODO Differenciate between Failed articles and already stored articles """
-            self.logger.info(f"Failed documents: {len(documents['articles']) - bwe.details['nInserted']}")
+            self.logger.debug(f"Failed documents: {len(documents['articles']) - bwe.details['nInserted']}")
         else:
             self.logger.info(f"Inserted documents: {len(result.inserted_ids)}")
