@@ -8,6 +8,7 @@ import logging
 class Scrape():
     def __init__(self, logger=None):
         self.logger = logger or logging.getLogger(__name__)
+        self.logger.info("Scraper initialized")
 
 
     def _img_finder_(self):
