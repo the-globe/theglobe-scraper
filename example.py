@@ -33,8 +33,10 @@ def main():
 
 
 if __name__ == "__main__":
-    # This has to be on top level!
-    theglobe.InitLogging()
-    logger = logging.getLogger(__name__)
-    main()
-
+    try:
+        # This has to be on top level!
+        theglobe.InitLogging()
+        logger = logging.getLogger(__name__)
+        main()
+    except Exception:
+        logger.error('An Error araised', exc_info=True)
