@@ -29,8 +29,16 @@ class Scrape():
         self.logger.info("Scraper initialized")
 
     def _img_finder_(self, url):
-        open_url = urllib.request.urlopen(url)
-        html_feed = open_url.read().decode("utf8")
+        try:
+            open_url = urllib.request.urlopen(url)
+        except urllib.error.HTTPError:
+            self.logger.warning(f"Can't access URL: {url}")
+            return "N/A"
+        try:
+            html_feed = open_url.read().decode("utf8")
+        except UnicodeDecodeError:
+            self.logger.warning(f"Can't decode parsed HTML of URL: {url}")
+            return "N/A"
 
         parser = MyHTMLParser()
         parser.feed(html_feed)
@@ -59,7 +67,7 @@ class Scrape():
             if type(parsed_newspaper) == list:
                 articles_json_list['articles'].extend(parsed_newspaper)
             else:
-                self.logger.error(f"Paper{url} returned error: " + parsed_newspaper)   
+                self.logger.error(f"Paper{url} returned error: " + parsed_newspaper)
         self.logger.debug(f"News in total found: {len(articles_json_list['articles'])}")
         return articles_json_list
 
@@ -80,6 +88,9 @@ class Scrape():
         post_json_list = []
 
         for post in news:
+            """ Extracts post url from object in list """
+            post_url = post.links[0]["href"]
+
             """ Tries to add an author """
             try:
                 post_author = post.author
@@ -106,9 +117,6 @@ class Scrape():
             except (AttributeError, IndexError):
                 """ Executes function that looks for image in article """
                 post_img = self._img_finder_(post_url)
-
-            """ Extracts post url from object in list """
-            post_url = post.links[0]["href"]
 
             """ Universalize time """
             try:
