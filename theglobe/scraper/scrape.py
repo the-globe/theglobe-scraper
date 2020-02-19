@@ -3,18 +3,54 @@
 import feedparser
 import datetime
 from html.parser import HTMLParser
+import urllib.request
 import logging
 
+class MyHTMLParser(HTMLParser):
+
+    def __init__(self):
+        super().__init__()
+        self.tag_list = []
+        self.attrs_list = []
+        self.data_list = []
+
+    def handle_starttag(self, tag, attrs):
+        self.tag_list.append(tag)
+        self.attrs_list.append(attrs)
+
+    def handle_data(self, data):
+        self.data_list.append(data)
+
+
 class Scrape():
+
     def __init__(self, logger=None):
         self.logger = logger or logging.getLogger(__name__)
         self.logger.info("Scraper initialized")
 
+    def _img_finder_(self, url):
+        open_url = urllib.request.urlopen(url)
+        html_feed = open_url.read().decode("utf8")
 
-    def _img_finder_(self):
-        """TODO: use HTML parser to get img tag and href attribute"""
-        pass
+        parser = MyHTMLParser()
+        parser.feed(html_feed)
 
+        tag_list = parser.tag_list
+        attrs_list = parser.attrs_list
+
+        index = 0
+        article_image = None
+        for tag in tag_list:
+            if "img" in tag:
+                for name, value in attrs_list[index]:
+                    if name == "width" and int(value) < 50:
+                        continue
+                    if name == "height" and int(value) > 50:
+                        for name, value in attrs_list[index]:
+                            if name == "src":
+                                article_image = value
+                                return article_image
+            index += 1
 
     def _get_articles_(self, url_list):
         articles_json_list = {'articles':[]}
@@ -38,7 +74,7 @@ class Scrape():
             paper_name = newsfeed.feed.title
         except Exception:
             self.logger.error(f"An Error araised", exc_info=True)
-        
+
         self.logger.debug(f'Number of posts in {paper_name}: {str(len(newsfeed.entries))}')
 
         post_json_list = []
@@ -68,8 +104,8 @@ class Scrape():
             try:
                 post_img = post.links[1]["href"]
             except (AttributeError, IndexError):
-                """ TODO use __img_finder get image manually """
-                post_img = "N/A"
+                """ Executes function that looks for image in article """
+                post_img = self._img_finder_(post_url)
 
             """ Extracts post url from object in list """
             post_url = post.links[0]["href"]
@@ -102,11 +138,16 @@ class Scrape():
 
             post_json_list.append(post_json)
 
-        return post_json_list
+        return post_json_list#
+
+
+""" DEBUGGING """
+if __name__ == "__main__":
+    scraper = Scrape()
+    img = scraper._img_finder_("https://www.spiegel.de/international/world/new-coronavirus-has-likely-already-spread-globally-a-f0c171b4-ed60-46ac-ae5b-5473cb49e806#ref=rss")
+    print(img)
 
 """
 TODO:
     parse html of article and get text
-    create system that detects tags
-    write bot that looks for img in article
 """
