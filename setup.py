@@ -17,7 +17,8 @@ setuptools.setup(
     install_requires=[
         'pymongo >= 3.10.1',
         'feedparser >= 5.2.1',
-        'colorlog >= 4.1.0'
+        'colorlog >= 4.1.0',
+        'scrapy >= 1.8.0'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
