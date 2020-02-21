@@ -52,6 +52,10 @@ class Scrape():
         for tag in tag_list:
             if "img" in tag:
                 for name, value in attrs_list[index]:
+                    """ Temporary workaround for if img size is set in % """
+                    if name == "width" and type(name) != int:
+                        self.logger.warning(f"Image size in % in {url}")
+                        continue
                     if name == "width" and int(value) < 50:
                         continue
                     if name == "height" and int(value) > 50:
