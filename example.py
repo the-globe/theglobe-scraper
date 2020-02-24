@@ -1,35 +1,17 @@
-import theglobe
 import logging
-
-def main():
-    # Init Database
-    URL = ("mongodb://b.lnru.de:27017/")
-    DB = "tg"
-    COLLECTION = "articles"
-    insert = theglobe.Insert(URL, DB, COLLECTION)
-
-    # Get scraped data
-    scraper = theglobe.Scrape()
-    articles_json_list = scraper._get_articles_([
-                'http://feeds.bbci.co.uk/news/england/london/rss.xml',
-                'https://www.spiegel.de/international/index.rss',
-                'https://elpais.com/rss/elpais/inenglish.xml',
-                'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',
-                'http://rss.cnn.com/rss/edition.rss',
-                'http://rss.cnn.com/rss/cnn_topstories.rss',
-                'http://rssfeeds.usatoday.com/usatoday-NewsTopStories',
-                'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms',
-                'https://feeds.a.dj.com/rss/RSSWorldNews.xml',
-                'https://www.rt.com/rss/news/',
-                'https://www.latimes.com/world/rss2.0.xml',
-                'http://www.aljazeera.com/xml/rss/all.xml',
-                'https://www.cbc.ca/cmlink/rss-world',
-                'http://www.independent.co.uk/news/world/rss',
-                'http://feeds.reuters.com/Reuters/worldNews'])
+import theglobe
+import scrapy
+from scrapy.crawler import CrawlerProcess
+from scrapy.utils.project import get_project_settings
 
 
-    # Insert Data
-    insert._insert_many_articles_(articles_json_list)
+
+
+def main(urls):
+    process = CrawlerProcess(get_project_settings())
+    """ TODO multi-threading """
+    process.crawl(theglobe.ArticlesSpider, urls = list(urls))
+    process.start()
 
 
 if __name__ == "__main__":
@@ -37,6 +19,8 @@ if __name__ == "__main__":
         # This has to be on top level!
         theglobe.InitLogging()
         logger = logging.getLogger(__name__)
-        main()
+
+        main(["http://rss.cnn.com/rss/edition.rss", "http://feeds.bbci.co.uk/news/rss.xml"])
+        
     except Exception:
         logger.error('An Error araised', exc_info=True)
