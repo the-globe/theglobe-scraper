@@ -79,6 +79,10 @@
         }
     },
         "formatters": {
+        "debug_console": {
+            "()": "colorlog.ColoredFormatter",
+            "format": "%(blue)s[%(asctime)s] %(log_color)s%(levelname)-8s [%(name)s] [%(module)s:%(funcName)s:%(lineno)s] %(white)s: %(message)s"
+        },
         "default_console": {
             "()": "colorlog.ColoredFormatter",
             "format": "%(blue)s[%(asctime)s] %(log_color)s%(levelname)-8s [%(name)s] [%(module)s:%(lineno)s] %(white)s: %(message)s"

@@ -1,3 +1,5 @@
+from .selectors import *
+
 # -*- coding: utf-8 -*-
 
 # Scrapy settings for theglobe project
@@ -97,37 +99,11 @@ ITEM_PIPELINES = {
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-""" TODO create shemes for each different site?! """
-# get_name() function
-NAME_SELECTORS = [
-    '//meta[@property="og:site_name"]/@content'
-]
 
-# get_publishedAt() fucntion
-PUB_DATE_SELECTORS = [
-    '//meta[contains(@name, "pub")]/@content',
-    '//meta[contains(@property, "pub")]/@content',
-    '//meta[@property="og:pubdate"]/@content',
-    '//meta[@name="pubdate"]/@content'
-]
-DATE_FORMATS = [
-    '%Y-%m-%dT%H:%M:%S.%fZ',
-    '%Y-%m-%dT%H:%M:%SZ'
-]
-
-# get_title() function
-TITLE_SELECTORS = [
-    '//h1/text()'
-]
-
-TITLE_DETAIL_SELECTORS = [
-    '//meta[@property="og:description"]/@content'
-]
-
-IMAGE_SELECTORS = [
-    '//meta[@property="og:image"]/@content'
-]
-
-AUTHOR_SELECTORS = [
-    '//meta[@name="author"]/@content'
-]
+NAME_SELECTORS
+PUB_DATE_SELECTORS 
+DATE_FORMATS 
+TITLE_SELECTORS 
+TITLE_DETAIL_SELECTORS 
+IMAGE_SELECTORS 
+AUTHOR_SELECTORS 
