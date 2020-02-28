@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from scrapy.exceptions import CloseSpider
+import json
 import logging
 import datetime
 
@@ -44,22 +45,26 @@ class ArticlesSpider(scrapy.Spider):
         """ TODO Get all data -> summary, author, content, tags"""
         self.logger.debug('A response from %s just arrived!', response.url)
 
-        article = self._get_schema_content_(response)
-
-        article = {
-            'name': self._get_name_(response),
-            'title': self._get_title_(response),
-            'title_detail': self._get_title_detail_(response),
-            'author': self._get_author_(response),
-            'summary': self._get_summary_(response),
-            'content': self._get_content_(response),
-            'tags': self._get_tags_(response),
-            'urlToImg': self._get_urlToImg_(response),
-            'url': response.url,
-            'publishedAt': self._get_publishedAt_(response),
-            'addedAt': datetime.datetime.utcnow(),
-            'score': "N/A"
-        }
+        if self._get_schema_content_(response):
+            article = self._get_schema_content_(response)
+            """ FEHLENDE ITEMS FÜLLEN """
+            #PLACEHOLDER
+            article = {}
+        else:
+            article = {
+                'name': self._get_name_(response),
+                'title': self._get_title_(response),
+                'title_detail': self._get_title_detail_(response),
+                'author': self._get_author_(response),
+                'summary': self._get_summary_(response),
+                'content': self._get_content_(response),
+                'tags': self._get_tags_(response),
+                'urlToImg': self._get_urlToImg_(response),
+                'url': response.url,
+                'publishedAt': self._get_publishedAt_(response),
+                'addedAt': datetime.datetime.utcnow(),
+                'score': "N/A"
+            }
 
         yield article
 
@@ -71,7 +76,12 @@ class ArticlesSpider(scrapy.Spider):
             except Exception:
                 continue
             else:
-                self.logger.critical(f"SCHEMA: {schema}")
+                try:
+                    schema_dict = json.loads(schema)
+                except TypeError:
+                    self.logger.info(f"Couldn't find schema dict in: {response.url}")
+                    return False
+                self.logger.critical(f"SCHEMA: {schema_dict['@type']}")
                 return schema
         self.logger.critical(f"None of the given selectors worked for: {response.url} ")
         return("N/A")
@@ -191,7 +201,7 @@ class ArticlesSpider(scrapy.Spider):
 
     def _get_urlToImg_(self, response):
         """
-        Get the main Image of the article. 
+        Get the main Image of the article.
         Articles can have more than one picture,
         but this method only wants to get the main picture.
         """
