@@ -69,7 +69,10 @@ class DataHandler():
                         self.logger.warning(f"Something went wrong when trying to access the downloaded schema. url = {self.response.url}, key = {key}/{x}", exc_info=True)
                         value = self.__convert_response_xpath_(key)
                         break
+                if key == "publishedAt" or key == "modifiedAt":
+                    value = self._date_formatter_(value)
                 data[key] = value
+        """TODO put a schema check here (pip install schema / pip install jsonschema)"""
         return data
 
 

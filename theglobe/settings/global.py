@@ -76,6 +76,7 @@ ROBOTSTXT_OBEY = True
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'theglobe.pipelines.TheglobePipeline': 350,
+   'theglobe.pipelines.JsonWriterPipeline': 500,
    #'theglobe.pipelines.MongoPipeline': 800,
 }
 
@@ -103,6 +104,7 @@ ITEM_PIPELINES = {
 
 NAME_SELECTORS
 PUB_DATE_SELECTORS
+MOD_DATE_SELECTORS
 DATE_FORMATS
 TITLE_SELECTORS
 TITLE_DETAIL_SELECTORS
