@@ -17,7 +17,7 @@ class InitLogging():
 
             if not os.path.exists(os.path.join(dir_path, 'tmp')): # Check if tmp folder exist
                 os.makedirs(os.path.join(dir_path, 'tmp'))
-                
+
             config_path = os.path.join(dir_path, default_path)
             value = os.getenv(env_key, None)
             if value:
