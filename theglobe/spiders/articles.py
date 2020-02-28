@@ -19,10 +19,10 @@ class ArticlesSpider(scrapy.Spider):
     def start_requests(self):
         """Start a request for each url that got passed."""
         for url in self.urls:
-            yield scrapy.Request(url, self._check_urls_)
+            yield scrapy.Request(url, self._check_url_)
 
 
-    def _check_urls_(self, response):
+    def _check_url_(self, response):
         """ TODO Load shema for different news websites """
 
         SET_SELECTOR = '//channel/item'
@@ -38,12 +38,13 @@ class ArticlesSpider(scrapy.Spider):
                 add to redis
                 make the request below
             """
-            yield scrapy.Request(article_url, self._parse_) 
-            
+            yield scrapy.Request(article_url, self._parse_)
 
     def _parse_(self, response):
         """ TODO Get all data -> summary, author, content, tags"""
         self.logger.debug('A response from %s just arrived!', response.url)
+
+        article = self._get_schema_content_(response)
 
         article = {
             'name': self._get_name_(response),
@@ -62,6 +63,18 @@ class ArticlesSpider(scrapy.Spider):
 
         yield article
 
+    def _get_schema_content_(self, response):
+        SCHEMA_SELECTORS = self.settings.getlist('SCHEMA_SELECTORS')
+        for item in SCHEMA_SELECTORS:
+            try:
+                schema = response.xpath(item).get()
+            except Exception:
+                continue
+            else:
+                self.logger.critical(f"SCHEMA: {schema}")
+                return schema
+        self.logger.critical(f"None of the given selectors worked for: {response.url} ")
+        return("N/A")
 
     def _get_name_(self, response):
         """Get the name of the Newspaper."""
@@ -73,7 +86,7 @@ class ArticlesSpider(scrapy.Spider):
                 continue
             else:
                 return name
-        self.logger.debug(f"None of the given Selectors did work for: {response.url}")
+        self.logger.debug(f"None of the given Selectors worked for: {response.url}")
         return("N/A")
 
 
@@ -87,7 +100,7 @@ class ArticlesSpider(scrapy.Spider):
                 continue
             else:
                 return title
-        self.logger.debug(f"None of the given Selectors did work for: {response.url}")
+        self.logger.debug(f"None of the given Selectors worked for: {response.url}")
         return("N/A")
 
 
@@ -104,10 +117,9 @@ class ArticlesSpider(scrapy.Spider):
                 continue
             else:
                 return title_detail
-        self.logger.debug(f"None of the given Selectors did work for: {response.url}")
+        self.logger.debug(f"None of the given Selectors worked for: {response.url}")
         return("N/A")
 
-    
     def _get_author_(self, response):
         """
         Get the author of the article.
@@ -122,7 +134,7 @@ class ArticlesSpider(scrapy.Spider):
                 continue
             else:
                 return author
-        self.logger.debug(f"None of the given Selectors did work for: {response.url}")
+        self.logger.debug(f"None of the given Selectors worked for: {response.url}")
         return("N/A")
 
     def _get_summary_(self, response):
@@ -138,14 +150,14 @@ class ArticlesSpider(scrapy.Spider):
                 continue
             else:
                 return summary
-        self.logger.debug(f"None of the given Selectors did work for: {response.url}")
+        self.logger.debug(f"None of the given Selectors worked for: {response.url}")
         return("N/A")
 
 
     def _get_content_(self, response):
         """
-        Get the whole content of the article. 
-        TODO This is still pretty hard to do 
+        Get the whole content of the article.
+        TODO This is still pretty hard to do
         regarding to the fact that there are many different article types.
         """
         CONTENT_SELECTORS = self.settings.getlist('CONTENT_SELECTORS')
@@ -156,7 +168,7 @@ class ArticlesSpider(scrapy.Spider):
                 continue
             else:
                 return content
-        self.logger.debug(f"None of the given Selectors did work for: {response.url}")
+        self.logger.debug(f"None of the given Selectors worked for: {response.url}")
         return("N/A")
 
 
@@ -173,7 +185,7 @@ class ArticlesSpider(scrapy.Spider):
                 continue
             else:
                 return keywords
-        self.logger.debug(f"None of the given Selectors did work for: {response.url}")
+        self.logger.debug(f"None of the given Selectors worked for: {response.url}")
         return("N/A")
 
 
@@ -191,7 +203,7 @@ class ArticlesSpider(scrapy.Spider):
                 continue
             else:
                 return url_to_img
-        self.logger.debug(f"None of the given Selectors did work for: {response.url}")
+        self.logger.debug(f"None of the given Selectors worked for: {response.url}")
         return("N/A")
 
 
@@ -203,8 +215,8 @@ class ArticlesSpider(scrapy.Spider):
         """
         PUB_DATE_SELECTORS = self.settings.getlist('PUB_DATE_SELECTORS')
         DATE_FORMATS = self.settings.getlist('DATE_FORMATS')
-        
-        """ 
+
+        """
         TODO BBC doesn't provide specific data in the meta tags
         they are working with schema.org though.
         e.g. : <script type="application/ld+json"> {key:value} </script>
@@ -215,12 +227,12 @@ class ArticlesSpider(scrapy.Spider):
                 response_date = response.xpath(item).get()
                 for format in DATE_FORMATS:
                     try:
-                        publishedAt = datetime.datetime.strptime(response_date, format)    
+                        publishedAt = datetime.datetime.strptime(response_date, format)
                     except Exception:
                         continue
                     else:
                         return publishedAt
             except Exception:
                 continue
-        self.logger.debug(f"None of the given Selectors did work for: {response.url}")
+        self.logger.debug(f"None of the given Selectors worked for: {response.url}")
         return("N/A")

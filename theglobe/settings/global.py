@@ -75,7 +75,7 @@ ROBOTSTXT_OBEY = True
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'theglobe.pipelines.TheglobePipeline': 350,
-   'theglobe.pipelines.MongoPipeline': 800,
+   #'theglobe.pipelines.MongoPipeline': 800,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -101,9 +101,10 @@ ITEM_PIPELINES = {
 
 
 NAME_SELECTORS
-PUB_DATE_SELECTORS 
-DATE_FORMATS 
-TITLE_SELECTORS 
-TITLE_DETAIL_SELECTORS 
-IMAGE_SELECTORS 
-AUTHOR_SELECTORS 
+PUB_DATE_SELECTORS
+DATE_FORMATS
+TITLE_SELECTORS
+TITLE_DETAIL_SELECTORS
+IMAGE_SELECTORS
+AUTHOR_SELECTORS
+SCHEMA_SELECTOR

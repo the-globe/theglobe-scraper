@@ -20,7 +20,10 @@ if __name__ == "__main__":
         theglobe.InitLogging()
         logger = logging.getLogger(__name__)
 
-        main(["http://rss.cnn.com/rss/edition.rss", "http://feeds.bbci.co.uk/news/rss.xml"])
-        
+        main([
+            "http://rss.cnn.com/rss/edition.rss",
+            "http://feeds.bbci.co.uk/news/rss.xml"
+            ])
+
     except Exception:
         logger.error('An Error araised', exc_info=True)
