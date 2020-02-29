@@ -30,27 +30,17 @@ DEFAULT = {
         'list': []
     },
 }
+WEBPAGE = {
+    'name': {
+        'list': ['publisher']
+    }
+}
 REPORTAGENEWSARTICLE = {
     'name': {
         'list': ["publisher","name"]
     },
-    'title': {
-        'list': []
-    },
-    'title_detail': {
-        'list': []
-    },
     'author': {
         'list': ['author', 'name']
-    },
-    'summary': {
-        'list': []
-    },
-    'content': {
-        'list': []
-    },
-    'tags': {
-        'list': []
     },
     'urlToImg': {
         'list': ['image', 'url']
@@ -60,29 +50,14 @@ REPORTAGENEWSARTICLE = {
     },
     'modifiedAt': {
         'list': ['dateModified']
-    },
+    }
 }
 BACKGROUNDNEWSARTICLE = {
     'name': {
         'list': ["publisher","name"]
     },
-    'title': {
-        'list': []
-    },
-    'title_detail': {
-        'list': []
-    },
     'author': {
         'list': ['author', 'name']
-    },
-    'summary': {
-        'list': []
-    },
-    'content': {
-        'list': []
-    },
-    'tags': {
-        'list': []
     },
     'urlToImg': {
         'list': ['image', 'url']
@@ -92,5 +67,33 @@ BACKGROUNDNEWSARTICLE = {
     },
     'modifiedAt': {
         'list': ['dateModified']
+    }
+}
+NEWSARTICLE = {
+    'name': {
+        'list': ["publisher","name"]
+    },
+    'author': {
+        'list': ['author', 'name']
+    },
+    'urlToImg': {
+        'list': ['image', 'url']
+    },
+    'publishedAt': {
+        'list': ['datePublished']
+    },
+    'modifiedAt': {
+        'list': ['dateModified']
+    }
+}
+VIDEOOBJECT = {
+    'title': {
+        'list': ['name']
+    },
+    'title_detail': {
+        'list': ['description']
+    },
+    'publishedAt': {
+        'list': ['uploadDate']
     },
 }

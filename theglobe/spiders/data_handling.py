@@ -39,6 +39,7 @@ class DataHandler():
         self.get_func['urlToImg'] = self._get_urlToImg_
         self.get_func['publishedAt'] = self._get_publishedAt_
         self.get_func['modifiedAt'] = self._get_modifiedAt_
+        self.default_schema_type = self.settings.getdict('DEFAULT')
 
     def _get_all_data_(self):
         """accesed by spider.articles.py"""
@@ -63,7 +64,7 @@ class DataHandler():
                     schema = json.loads(schema)
                 except TypeError:
                     self.logger.debug(f"Couldn't find schema dict in: {self.response.url}")
-                    self.schema_type = self.settings.getdict('DEFAULT')
+                    self.schema_type = self.default_schema_type
                 else:
                     self.logger.debug(f"Schema {schema['@type']} found in: {self.response.url}")
                     # Check if schema type exist in settings
@@ -78,10 +79,17 @@ class DataHandler():
         This private function checks the given schema on existence in the settings.
         If this schema doesn't exist it will through a warning and set the schema_type to DEFAULT.
         """
-        self.schema_type = self.settings.getdict(schema['@type'].upper())
-        if not self.schema_type:
-            self.logger.warning(f"There is no existing Schema sample for the {schema['@type']} type.")
-            self.schema_type = self.settings.getdict('DEFAULT')
+        schema_type = self.settings.getdict(schema['@type'].upper())
+        if not schema_type:
+            self.logger.warning(f"There is no existing Schema sample for the {schema['@type']} type. Using default, url: {self.response.url}")
+            self.schema_type = self.default_schema_type
+        else:
+            type = self.default_schema_type
+            type.update(schema_type)
+            self.schema_type = type
+            self.logger.debug(f"Schema {schema['@type']} does exist. Default got updated for {self.response.url}")
+
+
 
 
     def __convert_data_(self, schema):
@@ -107,10 +115,19 @@ class DataHandler():
                 for x in self.schema_type[key]['list']:
                     try:
                         value = value[x]
-                    except Exception:
-                        self.logger.warning(f"Something went wrong when trying to access the downloaded schema. url = {self.response.url}, key = {key}/{x}", exc_info=True)
-                        value = self.__convert_response_xpath_(key)
-                        break
+                    except KeyError:
+                        try:
+                            self.logger.warning(f"{schema['@type']} acces problem: key = {key} -> {x}, url = {self.response.url} . Trying if there is a '@list' object.")
+                            new_value = []
+                            for item in value['@list']:
+                                new_value.extend(item[x])
+                            value = new_value
+                        except Exception:
+                            self.logger.warning(f"Something went wrong when trying to access the downloaded {schema['@type']} schema. url = {self.response.url} , key = {key} -> {x}", exc_info=True)
+                            value = self.__convert_response_xpath_(key)
+                            break
+                        else:
+                            self.logger.info(f"'@list' object found in {schema['@type']} schema for url = {self.response.url}")
 
                 """TODO If this function gets it's date values from the schema.org tag it's not formatted -> Idially this should be done better than here."""
                 if key == "publishedAt" or key == "modifiedAt":

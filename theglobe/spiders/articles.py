@@ -55,7 +55,7 @@ class ArticlesSpider(scrapy.Spider):
             article['score'] = "N/A"
             article['url'] = response.url
 
-            self.logger.info(article)
+            self.logger.debug(article)
             yield article
 
         else:
