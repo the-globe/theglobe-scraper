@@ -21,12 +21,16 @@ project/
 
             global.py       # project settings file
 
-            selectors       # settings file for all the selectors (article)
+            selectors.oy    # settings file for all the selectors (article)
+            
+            schemas.py      # schemas according to schema.org
 
         spiders/          # a directory with all the spiders
             __init__.py
 
             articles.py   # This spider Scrapes through news websites to get articles.
+            
+            data_handling.py # handling the scraped data (sort it)
 ```
 
 # Project Architecture (Data Flow)
