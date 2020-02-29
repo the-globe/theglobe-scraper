@@ -4,6 +4,26 @@ import datetime
 
 
 class DataHandler():
+    """
+    Class do handle scraped article Data
+    This handler uses two methods to convert the responses.
+
+    1. Schema.org has consistent schemas companies can implement in their webpages.
+    2. Through the usual scrapy method -> xpath, this handler tries to acces meta tags.
+
+    For booth methods there are setting files (settings/) that define schemas or selectors (xpath).
+
+    Data Flow (_get_all_data_):
+    1. -> __get_schema_ -> __check_schema_
+
+    2. -> __convert_data_   ->  try with schema first
+                            ->  then with xpath
+
+    !!!! IMPORTANT !!!!
+    The keys in settings/schemas for each schema_type set the fundament of what keys will be in the document.
+    Those keys has to be unique and should be a foundation for the 'key <-> function' relation defined in __init__()
+    """
+
     def __init__(self, response, settings):
         self.logger = logging.getLogger(__name__)
         self.settings = settings
@@ -21,11 +41,17 @@ class DataHandler():
         self.get_func['modifiedAt'] = self._get_modifiedAt_
 
     def _get_all_data_(self):
+        """accesed by spider.articles.py"""
         schema = self.__get_schema_()
         article = self.__convert_data_(schema)
         return article
 
     def __get_schema_(self):
+        """
+        Private function that tries to get a schema according to schema.org.
+        If there is a schema in the given response, it checks it with __check_schema_().
+        If there is no schema found the schema_type will be set to DEFAULT (see settings).
+        """
         SCHEMA_SELECTORS = self.settings.getlist('SCHEMA_SELECTORS')
         for item in SCHEMA_SELECTORS:
             try:
@@ -48,6 +74,10 @@ class DataHandler():
 
 
     def __check_shema_(self, schema):
+        """
+        This private function checks the given schema on existence in the settings.
+        If this schema doesn't exist it will through a warning and set the schema_type to DEFAULT.
+        """
         self.schema_type = self.settings.getdict(schema['@type'].upper())
         if not self.schema_type:
             self.logger.warning(f"There is no existing Schema sample for the {schema['@type']} type.")
@@ -55,6 +85,18 @@ class DataHandler():
 
 
     def __convert_data_(self, schema):
+        """
+        This private function converts the given response to a defined document/dict according the schemas in settings/schemas.
+        For more information on the schemas take a look at the settings file.
+
+        First this function gets all keys from the schema_type and loops through them.
+            If the value of the key is an empty list ([]) the function will instantly call the xpath converter.
+            Else it tries to acces the schema.org tag of the response with the given values inside the list.
+                if that fails the xpath converter is called again. (This should not happen, because the local and response schema_type should be the same)
+
+        Important is to understand that this function first tries to get the data for a key from the schema tag from a response.
+        When the schema_type is set to DEFAULT every value of a looped key is an empty list -> Hence xpath is called instantly.
+        """
         keys = self.schema_type.keys()
         data = {}
         for key in keys:
@@ -69,14 +111,24 @@ class DataHandler():
                         self.logger.warning(f"Something went wrong when trying to access the downloaded schema. url = {self.response.url}, key = {key}/{x}", exc_info=True)
                         value = self.__convert_response_xpath_(key)
                         break
+
+                """TODO If this function gets it's date values from the schema.org tag it's not formatted -> Idially this should be done better than here."""
                 if key == "publishedAt" or key == "modifiedAt":
                     value = self._date_formatter_(value)
                 data[key] = value
+
         """TODO put a schema check here (pip install schema / pip install jsonschema)"""
         return data
 
 
     def __convert_response_xpath_(self, key):
+        """
+        This function calls according to the given key a function saved in the get_func dict.
+            !!! Example:
+                key 'name' gets passed:
+                    get_func has to have same key -> 'name' with value -> _get_name_
+        The dict is defined in the __init__ function of this class.
+        """
         try:
             value = self.get_func[key]()
         except KeyError:
