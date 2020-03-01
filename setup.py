@@ -18,7 +18,8 @@ setuptools.setup(
         'pymongo >= 3.10.1',
         'colorlog >= 4.1.0',
         'scrapy >= 1.8.0',
-        'redis >= 3.4.1'
+        'redis >= 3.4.1',
+        'redisbloom >= 0.3.2'
 
     ],
     classifiers=[
