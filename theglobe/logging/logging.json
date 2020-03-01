@@ -7,7 +7,7 @@
                 "handlers": ["console_handler", "error_file_handler"]
         },
             "__main__": {
-                "level": "INFO",
+                "level": "DEBUG",
                 "handlers": ["main_rotating_file_handler", "error_file_handler"
             ]
         },

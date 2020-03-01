@@ -9,7 +9,6 @@ from scrapy.utils.project import get_project_settings
 
 def main(urls):
     process = CrawlerProcess(get_project_settings())
-    """ TODO multi-threading """
     process.crawl(theglobe.ArticlesSpider, urls = list(urls))
     process.start()
 

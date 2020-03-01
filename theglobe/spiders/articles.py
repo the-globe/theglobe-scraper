@@ -5,6 +5,8 @@ import json
 import logging
 import datetime
 from .data_handling import DataHandler
+import theglobe.redis
+
 
 class ArticlesSpider(scrapy.Spider):
     """Spider to scrape articles from news websites."""
@@ -33,14 +35,13 @@ class ArticlesSpider(scrapy.Spider):
 
             article_url = article.xpath(CONTENT_LINK).extract_first()
 
-            """ TODO check if url exist in redis
-            if check == False:
+            rm = theglobe.redis.RedisManager()
+
+            if rm._bf_check_url_pres_(article_url):
                 pass
             else:
-                add to redis
-                make the request below
-            """
-            yield scrapy.Request(article_url, self._parse_)
+                rm._bf_add_url_(article_url)
+                yield scrapy.Request(article_url, self._parse_)
 
     def _parse_(self, response):
         """ TODO Get all data -> summary, author, content, tags"""

@@ -12,10 +12,11 @@ class RedisManager():
 
         try:
             self.rb = Client(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD)
+            self.logger.info(f"Successfully connected to redis server")
         except Exception as e:
             self.logger.critical(f"Unable to connect to redis server: {e}")
 
-    def _redis_add_url_(self, url):
+    def _bf_add_url_(self, url):
         try:
             bf_add = self.rb.bfAdd('bf_urls', url)
             if bf_add:
@@ -25,7 +26,7 @@ class RedisManager():
         except Exception as e:
             self.logger.error(e)
 
-    def _redis_check_url_presence_(self, url):
+    def _bf_check_url_pres_(self, url):
         if self.rb.bfExists('bf_urls', url):
             self.logger.info(f"Found '{url}' in bloomfilter")
             return True
@@ -35,4 +36,4 @@ class RedisManager():
 
 if __name__ == '__main__':
     rm = RedisManager()
-    rm._redis_add_url_("test1")
+    rm._bf_add_url_("test1")
