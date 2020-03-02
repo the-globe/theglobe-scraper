@@ -65,14 +65,24 @@ class DataHandler():
             else:
                 try:
                     schema = json.loads(schema)
-                except TypeError:
-                    self.logger.debug(f"Couldn't find schema dict in: {self.response.url}")
-                    self.schema_type = self.default_schema_type
-                else:
+                    if type(schema) == list:
+                        raise TypeError
+                    if type(schema['@type']) == list:
+                        raise AttributeError
                     self.logger.debug(f"Schema {schema['@type']} found in: {self.response.url}")
+                    
+                except TypeError:
+                    self.logger.debug(f"Couldn't find/access schema in. Using default, url: {self.response.url}")
+                    self.schema_type = self.default_schema_type
+                    return None
+                except AttributeError:
+                    self.logger.debug(f"@type of schema is inside a list. Using default, url: {self.response.url}")
+                    self.schema_type = self.default_schema_type
+                    return None
+                else:
                     # Check if schema type exist in settings
                     self.__check_shema_(schema)
-                return schema
+                    return schema
         self.logger.critical(f"None of the SCHEMA_SELECTORS worked for: {self.response.url} ")
         return False
 
@@ -86,16 +96,18 @@ class DataHandler():
         if not schema_type:
             self.logger.warning(f"There is no existing Schema sample for the {schema['@type']} type. Using default, url: {self.response.url}")
             self.schema_type = self.default_schema_type
+            return False
         else:
             type = self.default_schema_type
             type.update(schema_type)
             self.schema_type = type
             self.logger.debug(f"Schema {schema['@type']} does exist. Default got updated for {self.response.url}")
+            return schema
 
 
 
 
-    def __convert_data_(self, schema):
+    def __convert_data_(self, schema=None):
         """
         This private function converts the given response to a defined document/dict according the schemas in settings/schemas.
         For more information on the schemas take a look at the settings file.
@@ -157,6 +169,7 @@ class DataHandler():
         else:
             if value == "N/A":
                 self.logger.debug(f"None of the Selectors ({key}) worked for {self.response.url}")
+                self.stats.inc_value(f'no_data_found/{key}')
             return value
 
 
@@ -333,5 +346,5 @@ class DataHandler():
                 continue
             else:
                 return form_date
-        self.logger.error(f"None of the Date Formats did work for '{date}'!")
+        self.logger.error(f"None of the Date Formats did work for '{date}'! url: {self.response.url}")
         return date
