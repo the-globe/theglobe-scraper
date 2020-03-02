@@ -1,6 +1,7 @@
 import logging
 import json
 import datetime
+import scrapy
 
 
 class DataHandler():
@@ -24,9 +25,10 @@ class DataHandler():
     Those keys has to be unique and should be a foundation for the 'key <-> function' relation defined in __init__()
     """
 
-    def __init__(self, response, settings):
+    def __init__(self, response, settings, stats):
         self.logger = logging.getLogger(__name__)
         self.settings = settings
+        self.stats = stats
         self.response = response
         self.get_func = {}
         self.get_func['name'] = self._get_name_
@@ -40,6 +42,7 @@ class DataHandler():
         self.get_func['publishedAt'] = self._get_publishedAt_
         self.get_func['modifiedAt'] = self._get_modifiedAt_
         self.default_schema_type = self.settings.getdict('DEFAULT')
+
 
     def _get_all_data_(self):
         """accesed by spider.articles.py"""
