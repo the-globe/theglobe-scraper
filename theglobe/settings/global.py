@@ -25,9 +25,9 @@ MONGO_DATABASE = 'tg'
 MONGO_COLLECTION = 'articles'
 
 # Redis Server Settings
-# REDIS_HOST = "rdwc.de"
-# REDIS_PORT = 6379
-# REDIS_PASSWORD = ""
+REDIS_HOST = "rdwc.de"
+REDIS_PORT = 6379
+REDIS_PASSWORD = ""
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'theglobe (+http://www.yourdomain.com)'
