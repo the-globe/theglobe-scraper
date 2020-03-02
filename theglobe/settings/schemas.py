@@ -97,3 +97,20 @@ VIDEOOBJECT = {
         'list': ['uploadDate']
     },
 }
+ANALYSISNEWSARTICLE = {
+    'name': {
+        'list': ["publisher","name"]
+    },
+    'author': {
+        'list': ['author', 'name']
+    },
+    'urlToImg': {
+        'list': ['image', 'url']
+    },
+    'publishedAt': {
+        'list': ['datePublished']
+    },
+    'modifiedAt': {
+        'list': ['dateModified']
+    }
+}
