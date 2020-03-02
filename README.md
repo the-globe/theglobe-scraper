@@ -31,6 +31,11 @@ project/
             articles.py   # This spider Scrapes through news websites to get articles.
             
             data_handling.py # handling the scraped data (sort it)
+         
+        redis/              # a directory containing the redisbloom manager
+            __init__.py
+            
+            redis_manager.py # manages all bloomfilter requests to the redis server
 ```
 
 # Project Architecture (Data Flow)
