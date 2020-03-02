@@ -1,57 +1,211 @@
 {
-    "@context": "http:\/\/schema.org",
-    "@type": "ReportageNewsArticle",
-    "url": "https:\/\/www.bbc.com\/news\/entertainment-arts-51582573",
-    "publisher": {
-        "@type": "NewsMediaOrganization",
-        "name": "BBC News",
-        "publishingPrinciples": "http:\/\/www.bbc.co.uk\/news\/help-41670342",
-        "logo": {
+    "Examples": {
+        "@context": "http:\/\/schema.org",
+        "@type": "ReportageNewsArticle",
+        "url": "https:\/\/www.bbc.com\/news\/entertainment-arts-51582573",
+        "publisher": {
+            "@type": "NewsMediaOrganization",
+            "name": "BBC News",
+            "publishingPrinciples": "http:\/\/www.bbc.co.uk\/news\/help-41670342",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/www.bbc.co.uk\/news\/special\/2015\/newsspec_10857\/bbc_news_logo.png?cb=1"
+            }
+        },
+        "datePublished": "2020-02-21T05:02:18+00:00",
+        "dateModified": "2020-02-21T05:02:18+00:00",
+        "headline": "EastEnders' June Brown leaves soap 'for good'",
+        "image": {
             "@type": "ImageObject",
-            "url": "https:\/\/www.bbc.co.uk\/news\/special\/2015\/newsspec_10857\/bbc_news_logo.png?cb=1"
+            "width": 720,
+            "height": 405,
+            "url": "https:\/\/ichef.bbci.co.uk\/news\/720\/cpsprodpb\/B4EE\/production\/_110981364_hi057715325.jpg"
+        },
+        "thumbnailUrl": "https:\/\/ichef.bbci.co.uk\/news\/208\/cpsprodpb\/B4EE\/production\/_110981364_hi057715325.jpg",
+        "author": {
+            "@type": "NewsMediaOrganization",
+            "name": "BBC News",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/www.bbc.co.uk\/news\/special\/2015\/newsspec_10857\/bbc_news_logo.png?cb=1"
+            },
+            "noBylinesPolicy": "http:\/\/www.bbc.co.uk\/news\/help-41670342#authorexpertise"
+        },
+        "mainEntityOfPage": "https:\/\/www.bbc.com\/news\/entertainment-arts-51582573",
+        "video": {
+            "@type": "VideoObject",
+            "name": "June Brown's 90 years in 90 seconds",
+            "description": "EastEnders star June Brown - aka Dot Cotton - is turning 90 on Thursday. Here's a 90-second look back at her life.",
+            "duration": "PT1M36S",
+            "thumbnailUrl": "https:\/\/ichef.bbci.co.uk\/images\/ic\/208x117\/p04t12n5.jpg",
+            "uploadDate": "2017-02-15T18:05:00+00:00"
         }
     },
-    "datePublished": "2020-02-21T05:02:18+00:00",
-    "dateModified": "2020-02-21T05:02:18+00:00",
-    "headline": "EastEnders' June Brown leaves soap 'for good'",
-    "image": {
-        "@type": "ImageObject",
-        "width": 720,
-        "height": 405,
-        "url": "https:\/\/ichef.bbci.co.uk\/news\/720\/cpsprodpb\/B4EE\/production\/_110981364_hi057715325.jpg"
-    },
-    "thumbnailUrl": "https:\/\/ichef.bbci.co.uk\/news\/208\/cpsprodpb\/B4EE\/production\/_110981364_hi057715325.jpg",
-    "author": {
-        "@type": "NewsMediaOrganization",
-        "name": "BBC News",
-        "logo": {
-            "@type": "ImageObject",
-            "url": "https:\/\/www.bbc.co.uk\/news\/special\/2015\/newsspec_10857\/bbc_news_logo.png?cb=1"
+    "CNN": {
+        "@context": "http://schema.org/",
+        "@type": "WebPage",
+        "name": "China wants to get back to normal as its coronavirus case numbers ease. That could be dangerous",
+        "publisher": "CNN",
+        "speakable": {
+            "@type": "SpeakableSpecification",
+            "cssSelector": [
+                ".pg-headline",
+                ".speakable"
+            ]
         },
-        "noBylinesPolicy": "http:\/\/www.bbc.co.uk\/news\/help-41670342#authorexpertise"
+        "url": "https://www.cnn.com/2020/02/27/asia/china-coronavirus-danger-intl-hnk/index.html"
     },
-    "mainEntityOfPage": "https:\/\/www.bbc.com\/news\/entertainment-arts-51582573",
-    "video": {
-        "@type": "VideoObject",
-        "name": "June Brown's 90 years in 90 seconds",
-        "description": "EastEnders star June Brown - aka Dot Cotton - is turning 90 on Thursday. Here's a 90-second look back at her life.",
-        "duration": "PT1M36S",
-        "thumbnailUrl": "https:\/\/ichef.bbci.co.uk\/images\/ic\/208x117\/p04t12n5.jpg",
-        "uploadDate": "2017-02-15T18:05:00+00:00"
-    }
-}
-
-{
-    "@context": "http://schema.org/",
-    "@type": "WebPage",
-    "name": "China wants to get back to normal as its coronavirus case numbers ease. That could be dangerous",
-    "publisher": "CNN",
-    "speakable": {
-        "@type": "SpeakableSpecification",
-        "cssSelector": [
-            ".pg-headline",
-            ".speakable"
-        ]
-    },
-    "url": "https://www.cnn.com/2020/02/27/asia/china-coronavirus-danger-intl-hnk/index.html"
+    "El Pais": [
+        {
+            "@context": "http://schema.org/",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "item": {
+                        "@id": "https://elpais.com",
+                        "name": "EL PAÍS: el periódico global"
+                    },
+                    "position": 1
+                },
+                {
+                    "@type": "ListItem",
+                    "item": {
+                        "@id": "https://english.elpais.com/spanish_way_of_life",
+                        "name": "Spanish Way Of Life"
+                    },
+                    "position": 2
+                },
+                {
+                    "@type": "ListItem",
+                    "item": {
+                        "@id": "https://english.elpais.com/economy_and_business",
+                        "name": "Economy And Business"
+                    },
+                    "position": 3
+                },
+                {
+                    "@type": "ListItem",
+                    "item": {
+                        "@id": "https://english.elpais.com/news",
+                        "name": "News"
+                    },
+                    "position": 4
+                }
+            ]
+        },
+        {
+            "@context": "http://schema.org",
+            "@type": "WebSite",
+            "name": "EL PAÍS in English",
+            "sameAs": [
+                "https://twitter.com/elpaisinenglish",
+                "https://www.facebook.com/elpaisinenglish"
+            ],
+            "description": "English version of EL PAÍS to read online: breaking news, opinion and editorial, reviews, features, science, business, culture, sports, travel, education &amp; more with EL PAÍS.",
+            "image": {
+                "@type": "ImageObject",
+                "url": "https://arc-anglerfish-eu-central-1-prod-prisa.s3.amazonaws.com/public/QB37SSWDTBGZRE3AW7QOMVEWHU.png",
+                "height": 200,
+                "width": 200
+            },
+            "url": "https://english.elpais.com",
+            "copyrightHolder": {
+                "@type": "NewsMediaOrganization",
+                "name": "EL PAÍS in English",
+                "url": "https://english.elpais.com",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://arc-anglerfish-eu-central-1-prod-prisa.s3.amazonaws.com/public/QB37SSWDTBGZRE3AW7QOMVEWHU.png",
+                    "height": 200,
+                    "width": 200
+                },
+                "location": {
+                    "@type": "Place",
+                    "name": "EL PAÍS in English",
+                    "hasMap": "https://www.google.com/maps/dir/40.4373704,-3.62446/EL+PAIS,+S.L,+Calle+Miguel+Yuste,+40,+28037+Madrid/@40.4374475,-3.6264062,17z/data=!3m1!4b1!4m9!4m8!1m1!4e1!1m5!1m1!1s0xd422f0ae374e7f9:0x85a924c5a0085092!2m2!1d-3.6242389!2d40.4374558",
+                    "url": "https://english.elpais.com",
+                    "geo": {
+                        "@type": "GeoCoordinates",
+                        "latitude": "40.4374475",
+                        "longitude": "-3.6264062,17"
+                    },
+                    "address": {
+                        "@type": "PostalAddress",
+                        "streetAddress": "Miguel Yuste",
+                        "addressLocality": "40",
+                        "addressRegion": "Madrid",
+                        "postalCode": "28037",
+                        "addressCountry": "ES"
+                    }
+                }
+            },
+            "creator": {
+                "@type": "NewsMediaOrganization"
+            }
+        },
+        {
+            "@context": "http://schema.org",
+            "@type": "NewsArticle",
+            "headline": "The pioneering Spanish company where staff work a four-day week",
+            "url": "https://english.elpais.com/elpais/2020/01/16/inenglish/1579178186_175588.html",
+            "datePublished": "2020-01-20T07:40:42Z",
+            "dateModified": "2020-01-20T07:40:42Z",
+            "description": "Software Delsol, located in the southern city of Jaén, has introduced the new timetables this year in a bid to boost productivity but without cutting salaries",
+            "articleBody": "A four-day week on the same salary has become a reality in Spain as a company in the southern Spanish city of Jaén, Software Delsol, this month reduced the hours of its 181 employees. The majority of the company’s staff already work from Monday to Thursday, leaving a handful to work four continuous days, rotating from Monday to Thursday or Tuesday to Friday to guarantee customer service for the company’s 53,000 clients throughout Spain and South America, which are mainly small- and medium-sized firms. The four-day week has been made possible by hiring 25 new employees, enabling a reduction of hours from 40 a week to 36 in winter and 28 in summer. While the idea of the four-day week has been around for a long time, it has scarcely got off the ground either in Spain or abroad. It was tried – without success – in Finland and there were some experiments with it in New Zealand. But when it was implemented at Microsoft in Japan, sales increased by 40%. “It has not been easy to introduce this measure,” says Fulgencio Messeguer, Software Delsol’s CEO. “It has been challenging as there was no reference point and no legislation.” Messeguer is clear that the initiative is just another innovative step toward the development not only of the firm’s products but also of its human resources – some years back, they decided that staff would down tools on Friday afternoons and the week would wind down with a relaxed meeting. Established 26 years ago and located in the Geolit Science and Technology Park, the company’s headquarters are designed with both leisure and productivity in mind; more formal customer service zones combine with areas for informal meetings and sofas to relax on, not to mention the gym, paddle tennis court and outdoor pool. Staff also enjoy free lunches and the company offers scholarships, health insurance and the possibility of working from home as one employee does from Bordeaux, all of which improves the work-life balance. In addition, the company guarantees a salary hike of over 3% each year –3.2% this year – another unprecedented working condition in Spain’s labor landscape. But does the four-hour week affect productivity? “It means improved well-being at work, better customer service and also greater productivity,” says Messeguer. He also points out that it saves energy and reduces pollution as employees cut their car use by a day. The degree of customer satisfaction at Software Delsol is 90.28%, which the CEO considers exceptional and a benchmark to maintain. The company also believes that a shorter week leads to less absenteeism and greater staff loyalty while attracting an unparalleled pool of talent. In fact, the measure was enthusiastically received by the workforce – mostly Business Administration and Management graduates and about 20 telecommunications engineers – after being agreed by the works council led by the Federation of Trade Unions, Fasga. “The atmosphere is great and that is also reflected in the company’s results,” says Juan Antonio Mallenco, head of Communications at Software Delsol who believes that a company can be profitable and sustainable by taking care of internal resources, because, as he points out, “a satisfied employee means a satisfied customer.” English version by Heather Galloway.",
+            "keywords": [
+                "Economy & Business",
+                "Spanish Way Of Life"
+            ],
+            "author": [
+                {
+                    "@type": "Person",
+                    "name": "Ginés Donaire",
+                    "sameAs": "https://english.elpais.com/author/gines_donaire/a/"
+                }
+            ],
+            "articleSection": "News",
+            "mainEntityOfPage": "https://english.elpais.com/elpais/2020/01/16/inenglish/1579178186_175588.html",
+            "inLanguage": "en",
+            "contentLocation": "Jaén",
+            "image": [
+                {
+                    "@type": "ImageObject",
+                    "url": "https://arc-anglerfish-eu-central-1-prod-prisa.s3.amazonaws.com/public/ZRQQJMKZSHCW7I54BKRDQOZOJU.jpg",
+                    "height": 100,
+                    "width": 100
+                }
+            ],
+            "audio": [],
+            "video": [],
+            "publisher": [
+                {
+                    "@type": "NewsMediaOrganization",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://arc-anglerfish-eu-central-1-prod-prisa.s3.amazonaws.com/public/QB37SSWDTBGZRE3AW7QOMVEWHU.png",
+                        "height": 200,
+                        "width": 200
+                    },
+                    "name": "Ediciones EL PAÍS S.L."
+                }
+            ],
+            "publishingPrinciples": "https://elpais.com/estaticos/codigo-etico",
+            "associatedMedia": [
+                {
+                    "@type": "ImageObject",
+                    "url": "https://arc-anglerfish-eu-central-1-prod-prisa.s3.amazonaws.com/public/X26WMEU7US7OBMEJUX5IXSZK54.jpg",
+                    "height": 596,
+                    "width": 980
+                },
+                {
+                    "@type": "ImageObject",
+                    "url": "https://arc-anglerfish-eu-central-1-prod-prisa.s3.amazonaws.com/public/JSFXBAEANI62YRM4DP5HFIU5NE.jpg",
+                    "height": 551,
+                    "width": 980
+                }
+            ],
+            "name": "EL PAÍS in English"
+        }
+    ]
 }

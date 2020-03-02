@@ -13,23 +13,25 @@ class ArticlesSpider(scrapy.Spider):
 
     name = 'article_scraper'
 
-    def __init__(self, stats, settings):
-        super(ArticlesSpider, self).__init__()
+    def __init__(self, stats, settings, *args, **kwargs):
+        super(ArticlesSpider, self).__init__(*args, **kwargs)
         self.stats = stats
         self.settings = settings
         self.rm = theglobe.redis.RedisManager(settings, stats)
         """Get URL's from database"""
         self.urls = [
             "http://rss.cnn.com/rss/edition.rss",
-            # "http://feeds.bbci.co.uk/news/rss.xml"
+            "http://feeds.bbci.co.uk/news/rss.xml",
+            'https://elpais.com/rss/elpais/inenglish.xml'
             ]
 
 
     @classmethod
-    def from_crawler(cls, crawler):
+    def from_crawler(cls, crawler, *args, **kwargs):
         return cls(
             stats = crawler.stats,
-            settings = crawler.settings
+            settings = crawler.settings,
+            crawler = crawler
         )
 
 
