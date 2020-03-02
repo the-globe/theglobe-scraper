@@ -10,21 +10,6 @@
                 "level": "DEBUG",
                 "handlers": ["main_rotating_file_handler", "error_file_handler"
             ]
-        },
-            "theglobe.database.insert": {
-                "level": "INFO",
-                "handlers": ["theglobe_database_insert_rotating_file_handler","error_file_handler"
-            ]
-        },
-            "theglobe.logging.init_logging": {
-                "level": "INFO",
-                "handlers": ["theglobe_logging_init_logging_rotating_file_handler","error_file_handler"
-            ]
-        },
-            "theglobe.scraper.scrape": {
-                "level": "INFO",
-                "handlers": ["theglobe_scraper_scrape_rotating_file_handler","error_file_handler"
-            ]
         }
     },
         "handlers": {
@@ -39,33 +24,6 @@
                 "formatter": "default_file",
                 "class": "logging.handlers.RotatingFileHandler",
                 "filename": "./theglobe/logging/tmp/main.log",
-                "mode": "a",
-                "maxBytes": 1048576,
-                "backupCount": 10
-        },
-            "theglobe_database_insert_rotating_file_handler": {
-                "level": "DEBUG",
-                "formatter": "default_file",
-                "class": "logging.handlers.RotatingFileHandler",
-                "filename": "./theglobe/logging/tmp/theglobe_database_insert.log",
-                "mode": "a",
-                "maxBytes": 1048576,
-                "backupCount": 10
-        },
-            "theglobe_logging_init_logging_rotating_file_handler": {
-                "level": "DEBUG",
-                "formatter": "default_file",
-                "class": "logging.handlers.RotatingFileHandler",
-                "filename": "./theglobe/logging/tmp/theglobe_logging_init_logging.log",
-                "mode": "a",
-                "maxBytes": 1048576,
-                "backupCount": 10
-        },
-            "theglobe_scraper_scrape_rotating_file_handler": {
-                "level": "DEBUG",
-                "formatter": "default_file",
-                "class": "logging.handlers.RotatingFileHandler",
-                "filename": "./theglobe/logging/tmp/theglobe_scraper_scrape.log",
                 "mode": "a",
                 "maxBytes": 1048576,
                 "backupCount": 10
