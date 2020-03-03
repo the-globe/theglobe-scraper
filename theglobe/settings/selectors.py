@@ -25,3 +25,6 @@ TITLE_DETAIL_SELECTORS = ['//meta[@property="og:description"]/@content']
 IMAGE_SELECTORS = ['//meta[@property="og:image"]/@content']
 AUTHOR_SELECTORS = ['//meta[@name="author"]/@content']
 SCHEMA_SELECTORS = ['//script[@type="application/ld+json"]/text()']
+CONTENT_SELECTORS = [
+    '//div[@itemprop = "articleBody"]/descendant::text()[not(ancestor::script)]',
+]

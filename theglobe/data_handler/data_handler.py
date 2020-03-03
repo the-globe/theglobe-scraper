@@ -255,7 +255,11 @@ class DataHandler():
         CONTENT_SELECTORS = self.settings.getlist('CONTENT_SELECTORS')
         for item in CONTENT_SELECTORS:
             try:
-                content = self.response.xpath(item).get()
+                content = self.response.xpath(item).getall()
+                content = ''.join(map(str, content))
+                if content == '':
+                    raise Exception
+                
             except Exception:
                 continue
             else:
