@@ -5,6 +5,8 @@ import logging.config
 import colorlog
 
 
+
+
 """TODO: Set "debug_rotating_file_handler" to only handle DEBUG level logs in logging.json"""
 class InitLogging():
 
@@ -15,7 +17,7 @@ class InitLogging():
 
             if not os.path.exists(os.path.join(dir_path, 'tmp')): # Check if tmp folder exist
                 os.makedirs(os.path.join(dir_path, 'tmp'))
-                
+
             config_path = os.path.join(dir_path, default_path)
             value = os.getenv(env_key, None)
             if value:

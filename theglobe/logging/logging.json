@@ -3,32 +3,18 @@
         "disable_existing_loggers": false,
         "loggers": {
             "": {
-                "level": "NOTSET"
+                "level": "NOTSET",
+                "handlers": ["console_handler", "error_file_handler"]
         },
             "__main__": {
-                "level": "INFO",
-                "handlers": ["console_handler","main_rotating_file_handler", "error_file_handler"
-            ]
-        },
-            "theglobe.database.insert": {
-                "level": "INFO",
-                "handlers": ["console_handler","theglobe_database_insert_rotating_file_handler","error_file_handler"
-            ]
-        },
-            "theglobe.logging.init_logging": {
-                "level": "INFO",
-                "handlers": ["console_handler","theglobe_logging_init_logging_rotating_file_handler","error_file_handler"
-            ]
-        },
-            "theglobe.scraper.scrape": {
-                "level": "INFO",
-                "handlers": ["console_handler","theglobe_scraper_scrape_rotating_file_handler","error_file_handler"
+                "level": "DEBUG",
+                "handlers": ["main_rotating_file_handler", "error_file_handler"
             ]
         }
     },
         "handlers": {
             "console_handler": {
-                "level": "DEBUG",
+                "level": "INFO",
                 "formatter": "default_console",
                 "class": "logging.StreamHandler",
                 "stream": "ext://sys.stdout"
@@ -42,33 +28,6 @@
                 "maxBytes": 1048576,
                 "backupCount": 10
         },
-            "theglobe_database_insert_rotating_file_handler": {
-                "level": "DEBUG",
-                "formatter": "default_file",
-                "class": "logging.handlers.RotatingFileHandler",
-                "filename": "./theglobe/logging/tmp/theglobe_database_insert.log",
-                "mode": "a",
-                "maxBytes": 1048576,
-                "backupCount": 10
-        },
-            "theglobe_logging_init_logging_rotating_file_handler": {
-                "level": "DEBUG",
-                "formatter": "default_file",
-                "class": "logging.handlers.RotatingFileHandler",
-                "filename": "./theglobe/logging/tmp/theglobe_logging_init_logging.log",
-                "mode": "a",
-                "maxBytes": 1048576,
-                "backupCount": 10
-        },
-            "theglobe_scraper_scrape_rotating_file_handler": {
-                "level": "DEBUG",
-                "formatter": "default_file",
-                "class": "logging.handlers.RotatingFileHandler",
-                "filename": "./theglobe/logging/tmp/theglobe_scraper_scrape.log",
-                "mode": "a",
-                "maxBytes": 1048576,
-                "backupCount": 10
-        },
             "error_file_handler": {
                 "level": "ERROR",
                 "formatter": "default_file",
@@ -78,6 +37,10 @@
         }
     },
         "formatters": {
+        "debug_console": {
+            "()": "colorlog.ColoredFormatter",
+            "format": "%(blue)s[%(asctime)s] %(log_color)s%(levelname)-8s [%(name)s] [%(module)s:%(funcName)s:%(lineno)s] %(white)s: %(message)s"
+        },
         "default_console": {
             "()": "colorlog.ColoredFormatter",
             "format": "%(blue)s[%(asctime)s] %(log_color)s%(levelname)-8s [%(name)s] [%(module)s:%(lineno)s] %(white)s: %(message)s"

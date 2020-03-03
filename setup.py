@@ -16,9 +16,11 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         'pymongo >= 3.10.1',
-        'feedparser >= 5.2.1',
         'colorlog >= 4.1.0',
-        'scrapy >= 1.8.0'
+        'scrapy >= 1.8.0',
+        'redis >= 3.4.1',
+        'redisbloom >= 0.3.2'
+
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
