@@ -11,15 +11,9 @@ DEFAULT = {
     'author': {
         'list': []
     },
-    'summary': {
-        'list': []
-    },
-    'content': {
-        'list': []
-    },
-    'tags': {
-        'list': []
-    },
+    # 'content': {
+    #     'list': []
+    # },
     'urlToImg': {
         'list': []
     },
@@ -29,6 +23,14 @@ DEFAULT = {
     'modifiedAt': {
         'list': []
     },
+    'type': {
+        'list': [
+            #'@type',
+        ]
+    },
+    'tags': {
+        'list': []
+    }
 }
 WEBPAGE = {
     'name': {
@@ -59,6 +61,9 @@ BACKGROUNDNEWSARTICLE = {
     'author': {
         'list': ['author', 'name']
     },
+    'title': {
+        'list': ['headline']
+    },
     'urlToImg': {
         'list': ['image', 'url']
     },
@@ -75,6 +80,9 @@ NEWSARTICLE = {
     },
     'author': {
         'list': ['author', 'name']
+    },
+    'title': {
+        'list': ['headline']
     },
     'urlToImg': {
         'list': ['image', 'url']
@@ -93,9 +101,15 @@ VIDEOOBJECT = {
     'title_detail': {
         'list': ['description']
     },
+    'content': {
+        'list': ['description']
+    },
     'publishedAt': {
         'list': ['uploadDate']
     },
+    'embedUrl': {
+        'list': ['embedUrl']
+    }
 }
 ANALYSISNEWSARTICLE = {
     'name': {
@@ -103,6 +117,9 @@ ANALYSISNEWSARTICLE = {
     },
     'author': {
         'list': ['author', 'name']
+    },
+    'title': {
+        'list': ['headline']
     },
     'urlToImg': {
         'list': ['image', 'url']

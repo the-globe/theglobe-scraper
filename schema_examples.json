@@ -209,3 +209,48 @@
         }
     ]
 }
+
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "NewsArticle",
+    "url": "https:\/\/www.bbc.com\/news\/av\/health-51652874\/coronavirus-how-to-self-isolate",
+    "publisher": {
+        "@type": "NewsMediaOrganization",
+        "name": "BBC News",
+        "publishingPrinciples": "http:\/\/www.bbc.co.uk\/news\/help-41670342",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https:\/\/www.bbc.co.uk\/news\/special\/2015\/newsspec_10857\/bbc_news_logo.png?cb=1"
+        }
+    },
+    "description": "Five ways to successfully self-isolate to prevent the spread of the virus.",
+    "datePublished": "2020-02-26T18:59:42+00:00",
+    "dateModified": "2020-02-26T18:59:42+00:00",
+    "headline": "Coronavirus: How to self-isolate",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https:\/\/ichef.bbci.co.uk\/news\/720\/cpsprodpb\/179CB\/production\/_111051769_p084vy1f.jpg",
+        "width": 720,
+        "height": 405
+    },
+    "thumbnailUrl": "https:\/\/ichef.bbci.co.uk\/news\/208\/cpsprodpb\/179CB\/production\/_111051769_p084vy1f.jpg",
+    "author": {
+        "@type": "NewsMediaOrganization",
+        "name": "BBC News",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https:\/\/www.bbc.co.uk\/news\/special\/2015\/newsspec_10857\/bbc_news_logo.png?cb=1"
+        },
+        "noBylinesPolicy": "http:\/\/www.bbc.co.uk\/news\/help-41670342#authorexpertise"
+    },
+    "name": "Coronavirus: How to self-isolate",
+    "mainEntityOfPage": "https:\/\/www.bbc.com\/news\/av\/health-51652874\/coronavirus-how-to-self-isolate",
+    "video": {
+        "@type": "VideoObject",
+        "name": "Coronavirus: How to self-isolate",
+        "description": "The official advice if you suspect you have coronavirus is to self-isolate, but what does that actually mean and what's the right way to do it?\n\nThe BBC's medical correspondent Fergus Walsh explains the top five methods to successfully self-isolate.",
+        "duration": "PT1M30S",
+        "thumbnailUrl": "https:\/\/ichef.bbci.co.uk\/images\/ic\/208x117\/p084vy1f.jpg",
+        "uploadDate": "2020-02-26T18:44:01+00:00"
+    }
+}
