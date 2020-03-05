@@ -18,6 +18,8 @@ NEWSPIDER_MODULE = 'theglobe.spiders'
 
 LOG_ENABLED = False
 
+LOG__LEVEL = 'INFO' # Attention! This is not the usual LOG_LEVEL variable for scrapy
+
 # MongoDB Settings
 MONGO_URL = 'mongodb://rdwc.de:27017/'
 MONGO_DATABASE = 'tg'

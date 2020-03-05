@@ -1,5 +1,6 @@
 # python scrape.py -s <arg>
 # When passing 'test' as 'arg' redis and mongodb will be disabled
+# When passing 'debug' as 'arg' debug will be set in logging
 
 import logging
 import theglobe
@@ -18,28 +19,49 @@ def main(s):
 
 
 def check_args(argv):
+    help_msg = ('scrape.py -s <settingtype> -l <loglevel>\n\t-s "test"\n\t-l "debug"\n\t-h for help')
     try:
-        opts, args = getopt.getopt(argv,"hs:",["settings="])
+        opts, args = getopt.getopt(argv,"hs:l:",["settings="])
     except getopt.GetoptError:
-            print('test.py -s <settingtype> e.g. test')
+            print(help_msg)
             sys.exit(2)
+    s = get_project_settings()
     for opt, arg in opts:
         if opt == '-h':
-            print('test.py -s <settingtype> e.g. test')
+            print(help_msg)
             sys.exit()
         elif opt in ("-s", "--settings"):
             setting_type = arg
-            s = change_settings(setting_type)
-            if s:
+            cs = change_settings(s, setting_type)
+            if cs:
+                s = cs
                 print(f"Using '{arg}' settings!")
-                return s
+                
             else:
                 print(f"'{arg}' is not a valid arg!")
                 sys.exit(2)
+        elif opt in ("-l", "--logging"):
+            logging_level = arg
+            cs = change_logging_level(s, logging_level)
+            if cs:
+                print(f"Logging level = {cs['LOG__LEVEL']}")
+                s = cs
+            else:
+                print(f"'{arg}' is not a valid arg!")
+                sys.exit(2)
+    return s
 
 
-def change_settings(type):
-    s = get_project_settings()
+def change_logging_level(s, level):
+    print(level)
+    if level == 'debug':
+        s['LOG__LEVEL'] = "DEBUG"
+        return s
+    else:
+        return False
+
+
+def change_settings(s, type):
     if type == 'test':
         s['TESTING'] = True
         s['ITEM_PIPELINES'] = {
@@ -48,7 +70,7 @@ def change_settings(type):
         }
         return s
     else:
-        return s
+        return False
 
 
 if __name__ == "__main__":
@@ -57,7 +79,7 @@ if __name__ == "__main__":
         if s == None:
             s = get_project_settings()
         # This has to be on top level!
-        theglobe.InitLogging()
+        theglobe.InitLogging(s['LOG__LEVEL'])
         logger = logging.getLogger(__name__)
 
         main(s)
