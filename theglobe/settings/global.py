@@ -18,6 +18,7 @@ SPIDER_MODULES = ['theglobe.spiders']
 NEWSPIDER_MODULE = 'theglobe.spiders'
 
 LOG_ENABLED = False
+COOKIES_ENABLED = False
 
 # MongoDB Settings
 MONGO_URL = 'mongodb://rdwc.de:27017/'
@@ -28,6 +29,9 @@ MONGO_COLLECTION = 'articles'
 REDIS_HOST = "rdwc.de"
 REDIS_PORT = 6379
 REDIS_PASSWORD = ""
+
+# Rotating Scrapy Proxy Settings
+ROTATING_PROXY_LIST_PATH = 'theglobe/settings/proxies.txt'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'theglobe (+http://www.yourdomain.com)'
@@ -66,9 +70,11 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'theglobe.middlewares.TheglobeDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+   'theglobe.middlewares.TheglobeDownloaderMiddleware': 543,
+   'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+   'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html

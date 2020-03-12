@@ -5,7 +5,8 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-from scrapy import signals
+import rotating_proxies
+from scrapy import signals 
 
 
 class TheglobeSpiderMiddleware(object):
