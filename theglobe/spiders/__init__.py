@@ -4,3 +4,4 @@
 # your spiders.
 
 from .articles import ArticlesSpider
+from .meta import MetaSpider
