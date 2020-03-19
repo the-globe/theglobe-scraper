@@ -9,7 +9,7 @@ import colorlog
 
 class InitLogging():
 
-        def __init__(self, default_path='logging.json', default_level=logging.INFO, env_key='LOG_CFG'):
+        def __init__(self, log_level='INFO', default_path='logging.json', default_level=logging.INFO, env_key='LOG_CFG'):
             logger = logging.getLogger(__name__) # theglobe.logging.init_logging
 
             dir_path = os.path.dirname(os.path.realpath(__file__)) # Get path of this file
@@ -24,6 +24,7 @@ class InitLogging():
             if os.path.exists(config_path):
                 with open(config_path, 'rt') as f:
                     config = json.load(f)
+                config['handlers']['console_handler']['level'] = log_level
                 logging.config.dictConfig(config)
                 logger.debug(f"Logging Config loaded from file: {config_path}")
 

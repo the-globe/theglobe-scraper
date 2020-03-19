@@ -6,47 +6,46 @@ import logging
 import datetime
 from theglobe.data_handler import DataHandler
 import theglobe.redis
+from urllib.parse import urlparse
 
 
-class ArticlesSpider(scrapy.Spider):
+class MetaSpider(scrapy.Spider):
     """Spider to scrape articles from news websites."""
 
-    name = 'article_scraper'
+    name = 'meta_scraper'
 
     def __init__(self, stats, settings, *args, **kwargs):
-        super(ArticlesSpider, self).__init__(*args, **kwargs)
+        super(MetaSpider, self).__init__(*args, **kwargs)
         self.stats = stats
         self.settings = settings
-        if not settings.get('TESTING'):
-            self.rm = theglobe.redis.RedisManager(settings, stats)
         """Get URL's from database"""
         self.urls = [
             'http://feeds.bbci.co.uk/news/england/london/rss.xml',
-            'http://feeds.reuters.com/Reuters/worldNews',
-            'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms',
+            'https://www.spiegel.de/international/index.rss',
+            'https://elpais.com/rss/elpais/inenglish.xml',
+            'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',
             'http://rss.cnn.com/rss/edition.rss',
             'http://rss.cnn.com/rss/cnn_topstories.rss',
+            'http://rssfeeds.usatoday.com/usatoday-NewsTopStories',
+            'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms',
+            'https://feeds.a.dj.com/rss/RSSWorldNews.xml',
             'https://www.rt.com/rss/news/',
             'https://www.latimes.com/world/rss2.0.xml',
-            'https://feeds.a.dj.com/rss/RSSWorldNews.xml',
-            'https://elpais.com/rss/elpais/inenglish.xml',
-            'https://www.spiegel.de/international/index.rss',
-
-            # 'http://www.aljazeera.com/xml/rss/all.xml', # TODO needs support for Article schema type
-            # 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml', # TODO Not able to get the name - Manuel set of name for very site?
-            # 'http://rssfeeds.usatoday.com/usatoday-NewsTopStories', # TODO BAD SCHEMA AND META
-            # 'https://www.cbc.ca/cmlink/rss-world', # TODO needs configuration from the script, too
-            # 'http://www.independent.co.uk/news/world/rss', # TODO not working at all at the moment
-            ]
+            'http://www.aljazeera.com/xml/rss/all.xml',
+            'https://www.cbc.ca/cmlink/rss-world',
+            'http://www.independent.co.uk/news/world/rss',
+            'http://feeds.reuters.com/Reuters/worldNews']
 
 
     @classmethod
     def from_crawler(cls, crawler, *args, **kwargs):
-        return cls(
+        s = cls(
             stats = crawler.stats,
             settings = crawler.settings,
             crawler = crawler
         )
+        crawler.signals.connect(s.spider_closed, signal=scrapy.signals.spider_closed)
+        return s
 
 
     def start_requests(self):
@@ -67,28 +66,24 @@ class ArticlesSpider(scrapy.Spider):
             CONTENT_LINK = './/link/text()'
 
             article_url = article.xpath(CONTENT_LINK).extract_first()
-
-            if not self.settings.get('TESTING'):
-                if self.rm._bf_check_url_pres_(article_url):
-                    continue
-                else:
-                    self.rm._bf_add_url_(article_url)
             yield scrapy.Request(article_url, self._parse_)
 
     def _parse_(self, response):
         """ TODO Get all data -> summary, author, content, tags"""
         self.logger.debug('A response from %s just arrived!', response.url)
+        parsed_uri = urlparse(response.url)
+        domain = '{uri.netloc}'.format(uri=parsed_uri)
+        self.stats.inc_value(domain)
+        list = self.settings.getdict('META_SELECTORS').keys()
+        for item in list:
+            meta_selector = self.settings.getdict('META_SELECTORS')[item]
+            metas = response.xpath(meta_selector).getall()
+            for meta in metas:
+                self.stats.inc_value(domain+'/'+item+'="'+meta+'"')
 
-        self.data_handler = DataHandler(response, self.settings, self.stats)
+    def spider_opened(self, spider):
+        print("openeds")
 
-        article = self.data_handler._get_all_data_()
-
-        if article:
-            article['addedAt'] = datetime.datetime.utcnow()
-            article['score'] = "N/A"
-            article['url'] = response.url
-
-            yield article
-
-        else:
-            self.logger.warning("No data in article document")
+    def spider_closed(self, spider, reason):
+        with open('meta.json', 'w') as file:
+            json.dump(self.crawler.stats.get_stats(), file, default=str)

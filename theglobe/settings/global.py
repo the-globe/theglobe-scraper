@@ -1,4 +1,3 @@
-from .selectors import *
 from .schemas import *
 
 # -*- coding: utf-8 -*-
@@ -20,10 +19,12 @@ NEWSPIDER_MODULE = 'theglobe.spiders'
 LOG_ENABLED = False
 COOKIES_ENABLED = False
 
+LOG__LEVEL = 'INFO' # Attention! This is not the usual LOG_LEVEL variable for scrapy
+
 # MongoDB Settings
 MONGO_URL = 'mongodb://rdwc.de:27017/'
 MONGO_DATABASE = 'tg'
-MONGO_COLLECTION = 'articles'
+MONGO_COLLECTION = 'articles-v0-1-0'
 
 # Redis Server Settings
 REDIS_HOST = "rdwc.de"
@@ -33,11 +34,13 @@ REDIS_PASSWORD = ""
 # Rotating Scrapy Proxy Settings
 ROTATING_PROXY_LIST_PATH = 'theglobe/settings/proxies.txt'
 
+TESTING = False
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'theglobe (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -87,7 +90,7 @@ DOWNLOADER_MIDDLEWARES = {
 ITEM_PIPELINES = {
    'theglobe.pipelines.TheglobePipeline': 350,
    'theglobe.pipelines.JsonWriterPipeline': 500,
-   # 'theglobe.pipelines.MongoPipeline': 800,
+   'theglobe.pipelines.MongoPipeline': 800,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -112,15 +115,24 @@ ITEM_PIPELINES = {
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 
-NAME_SELECTORS
-PUB_DATE_SELECTORS
-MOD_DATE_SELECTORS
-DATE_FORMATS
-TITLE_SELECTORS
-TITLE_DETAIL_SELECTORS
-IMAGE_SELECTORS
-AUTHOR_SELECTORS
-SCHEMA_SELECTORS
+SCHEMA_SELECTOR = '//script[@type="application/ld+json"]/text()'
+DATE_FORMATS = [
+        '%Y-%m-%dT%H:%M:%S.%fZ',
+        '%Y-%m-%dT%H:%M:%SZ',
+        '%Y-%m-%dT%H:%M:%S+00:00',
+        '%Y-%m-%d %H:%M:%S',
+        '%Y/%m/%d %H:%M:%S',
+        '%Y-%m-%dT%H:%M:%S%z',
+        '%Y-%m-%d',
+        '%d %b %Y %H:%M %Z',
+        '%Y-%m-%dT%H:%MZ',
+
+]
+META_SELECTORS = {
+   '@name': '//meta/@name',
+   '@property': '//meta/@property',
+   '@itemprop': '//div/@itemprop'
+}
 
 DEFAULT
 REPORTAGENEWSARTICLE
@@ -128,3 +140,24 @@ BACKGROUNDNEWSARTICLE
 WEBPAGE
 VIDEOOBJECT
 NEWSARTICLE
+ANALYSISNEWSARTICLE
+
+NEWS_ORGANISATIONS = {
+   'edition.cnn.com': 'cnn',
+   'www.bbc.co.uk': 'bbc',
+   'english.elpais.com': 'elpais',
+   'elpais.com': 'elpais',
+   'timesofindia.indiatimes.com': 'indiatimes',
+   'www.rt.com': 'rt',
+   'www.latimes.com': 'latimes',
+   'www.wsj.com': 'wsj',
+   'www.reuters.com': 'reuters',
+   'www.spiegel.de' : 'spiegel',
+   'www.nytimes.com' : 'nytimes',
+   'eu.usatoday.com' : 'usatoday',
+   'www.aljazeera.com': 'aljazeera',
+   'www.cbc.ca' : 'cbc',
+
+
+}
+

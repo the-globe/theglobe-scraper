@@ -9,7 +9,7 @@ from scrapy.utils.project import get_project_settings
 
 def main():
     process = CrawlerProcess(get_project_settings())
-    process.crawl(theglobe.ArticlesSpider)
+    process.crawl(theglobe.MetaSpider)
     process.start()
 
 
