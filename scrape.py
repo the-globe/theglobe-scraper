@@ -21,7 +21,7 @@ def main(s):
 def check_args(argv):
     help_msg = ('scrape.py -s <settingtype> -l <loglevel>\n\t-s "test"\n\t-l "debug"\n\t-h for help')
     try:
-        opts, args = getopt.getopt(argv,"hs:l:",["settings="])
+        opts, args = getopt.getopt(argv,"hs:l:u:",["settings=", "logging=","urls="])
     except getopt.GetoptError:
             print(help_msg)
             sys.exit(2)
