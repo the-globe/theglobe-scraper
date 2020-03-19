@@ -109,7 +109,7 @@ ITEM_PIPELINES = {
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 
-SCHEMA_SELECTORS = ['//script[@type="application/ld+json"]/text()']
+SCHEMA_SELECTOR = '//script[@type="application/ld+json"]/text()'
 DATE_FORMATS = [
         '%Y-%m-%dT%H:%M:%S.%fZ',
         '%Y-%m-%dT%H:%M:%SZ',
@@ -117,7 +117,9 @@ DATE_FORMATS = [
         '%Y-%m-%d %H:%M:%S',
         '%Y/%m/%d %H:%M:%S',
         '%Y-%m-%dT%H:%M:%S%z',
-        '%Y-%m-%d'
+        '%Y-%m-%d',
+        '%d %b %Y %H:%M %Z',
+        '%Y-%m-%dT%H:%MZ',
 
 ]
 META_SELECTORS = {
@@ -125,9 +127,6 @@ META_SELECTORS = {
    '@property': '//meta/@property',
    '@itemprop': '//div/@itemprop'
 }
-TYPE_SELECTORS = [
-   '//meta[@property="og:type"]/@content'
-]
 
 DEFAULT
 REPORTAGENEWSARTICLE
@@ -142,5 +141,17 @@ NEWS_ORGANISATIONS = {
    'www.bbc.co.uk': 'bbc',
    'english.elpais.com': 'elpais',
    'elpais.com': 'elpais',
+   'timesofindia.indiatimes.com': 'indiatimes',
+   'www.rt.com': 'rt',
+   'www.latimes.com': 'latimes',
+   'www.wsj.com': 'wsj',
+   'www.reuters.com': 'reuters',
+   'www.spiegel.de' : 'spiegel',
+   'www.nytimes.com' : 'nytimes',
+   'eu.usatoday.com' : 'usatoday',
+   'www.aljazeera.com': 'aljazeera',
+   'www.cbc.ca' : 'cbc',
+
+
 }
 

@@ -30,6 +30,9 @@ DEFAULT = {
     },
     'tags': {
         'list': []
+    },
+    'section': {
+        'list': []
     }
 }
 WEBPAGE = {
@@ -101,9 +104,9 @@ VIDEOOBJECT = {
     'title_detail': {
         'list': ['description']
     },
-    'content': {
-        'list': ['description']
-    },
+    # 'content': {
+    #     'list': ['description']
+    # },
     'publishedAt': {
         'list': ['uploadDate']
     },

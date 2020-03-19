@@ -4,6 +4,7 @@ import datetime
 import scrapy
 import importlib
 from urllib.parse import urlparse
+import ast
 
 
 class DataHandler():
@@ -32,19 +33,20 @@ class DataHandler():
         self.settings = settings
         self.stats = stats
         self.response = response
-        self.get_func = {}
-        self.get_func['name'] = self._get_name_
-        self.get_func['title'] = self._get_title_
-        self.get_func['title_detail'] = self._get_title_detail_
-        self.get_func['author'] = self._get_author_
-        self.get_func['summary'] =  self._get_summary_
-        self.get_func['content'] = self._get_content_
-        self.get_func['tags'] = self._get_tags_
-        self.get_func['urlToImg'] = self._get_urlToImg_
-        self.get_func['publishedAt'] = self._get_publishedAt_
-        self.get_func['modifiedAt'] = self._get_modifiedAt_
-        self.get_func['embedUrl'] = self._get_embedUrl_
-        self.get_func['type'] = self._get_type_
+        self.get_selector = {}
+        self.get_selector['name'] = 'NAME_SELECTORS'
+        self.get_selector['title'] = 'TITLE_SELECTORS'
+        self.get_selector['title_detail'] = 'TITLE_DETAIL_SELECTORS'
+        self.get_selector['author'] = 'AUTHOR_SELECTORS'
+        self.get_selector['summary'] =  'SUMMARY_SELECTORS'
+        self.get_selector['content'] = 'CONTENT_SELECTORS'
+        self.get_selector['section'] = 'SECTION_SELECTORS'
+        self.get_selector['tags'] = 'TAG_SELECTORS'
+        self.get_selector['urlToImg'] = 'IMAGE_SELECTORS'
+        self.get_selector['publishedAt'] = 'PUB_DATE_SELECTORS'
+        self.get_selector['modifiedAt'] = 'MOD_DATE_SELECTORS'
+        self.get_selector['embedUrl'] = 'EMBED_URL_SELECTORS'
+        self.get_selector['type'] = 'TYPE_SELECTORS'
         self.default_schema_type = self.settings.getdict('DEFAULT')
 
 
@@ -52,15 +54,15 @@ class DataHandler():
         """accesed by spider.articles.py"""
         self.selectors = self.__get_news_settings_()
         if self.selectors == False:
-            self.logger.error("__get_news_settings_() returned False")
+            self.logger.warning("__get_news_settings_() returned False")
             return False
         schema = self.__get_schema_()
         if schema == False:
-            self.logger.error("__get_schema_() returned False")
+            self.logger.warning("__get_schema_() returned False")
             return False
         article = self.__convert_data_(schema)
         if article == False:
-            self.logger.error("__convert_data_() returned False")
+            self.logger.warning("__convert_data_() returned False")
             return False
         return article
 
@@ -70,33 +72,62 @@ class DataHandler():
         If there is a schema in the given response, it checks it with __check_schema_().
         If there is no schema found the schema_type will be set to DEFAULT (see settings).
         """
-        SCHEMA_SELECTORS = self.settings.getlist('SCHEMA_SELECTORS')
-        for item in SCHEMA_SELECTORS:
+        SCHEMA_SELECTOR = self.settings.get('SCHEMA_SELECTOR')
+        try:
+            index = int(self.schema_handling['index'])
+            list_check = self.schema_handling['list_check']
+
+            schema = self.response.xpath(SCHEMA_SELECTOR).getall()
+            if schema == None or schema == []:
+                self.logger.info(f'No schema found on [ {self.response.url} ] Using default')
+                self.schema_type = self.default_schema_type
+                return None
+            
+            schema = schema[index]
             try:
-                schema = self.response.xpath(item).get()
+                schema = json.loads(schema)
             except Exception:
-                continue
-            else:
+                self.logger.warning(f"Couldn't load schema with json url: [ {self.response.url} ]", exc_info=False)
+                raise Exception
+            if list_check == True:
                 try:
-                    schema = json.loads(schema)
-                    if type(schema) == list: # Issue #14
+                    if type(schema) != list:
                         raise TypeError
-                    if type(schema['@type']) == list: # Issue #14
-                        raise AttributeError
-                    self.logger.debug(f"Schema {schema['@type']} found in: {self.response.url}")
-                except TypeError:
-                    self.logger.debug(f"Couldn't find/access schema in. Using default, url: {self.response.url}")
-                    self.schema_type = self.default_schema_type
-                    return None
-                except AttributeError:
-                    self.logger.debug(f"@type key of schema is inside a list. Using default, url: {self.response.url}")
-                    self.schema_type = self.default_schema_type
-                    return None
+                except Exception:
+                    self.logger.warning("list_check = True, but it's not a list")
                 else:
-                    self.__check_shema_(schema) # Check if schema type exist in settings
-                    return schema
-        self.logger.critical(f"None of the SCHEMA_SELECTORS worked for: {self.response.url} ")
-        return False
+                    list_index = self.schema_handling['list_index']
+                    if list_index != None:
+                        schema = schema[list_index] 
+                    # else:
+                    #     self.logger.info(schema)
+                    #     for item in schema:
+                    #         try:
+                    #             item = dict(item)
+                    #         except Exception:
+                    #             self.logger.warning(f"Couldn't load schema with dict [ {self.response.url} ]\nItem: {item}", exc_info=False)
+                    #             raise Exception
+                    #         else:
+                    #             schema = item
+            if type(schema['@type']) == list:
+                type_is_list = True
+            else:
+                type_is_list = False
+        except Exception:
+            self.logger.error(f"schema handling went wrong url [ {self.response.url} ]", exc_info=True)
+            return False
+        else:
+            if type_is_list == True:
+                self.schema_at_type = schema['@type'][0]
+            else:
+                self.schema_at_type = schema['@type']
+                self.logger.debug(f"Schema {self.schema_at_type} found in: {self.response.url}")
+            if self.__check_shema_(schema): # Check if schema type exist in settings
+                return schema
+            else:
+                return None
+        self.logger.error(f"None of the SCHEMA_SELECTORS worked for: {self.response.url} ")
+        return None
 
 
     def __check_shema_(self, schema):
@@ -104,27 +135,29 @@ class DataHandler():
         This private function checks the given schema on existence in the settings.
         If this schema doesn't exist it will through a warning and set the schema_type to DEFAULT.
         """
-        schema_type = self.settings.getdict(schema['@type'].upper())
+        schema_type = self.settings.getdict(self.schema_at_type.upper())
         if not schema_type:
-            self.logger.warning(f"There is no existing Schema sample for the {schema['@type']} type. Using default, url: {self.response.url}")
+            self.logger.warning(f"There is no existing Schema sample for the {self.schema_at_type} type. Using default, url: {self.response.url}")
             self.schema_type = self.default_schema_type
             return False
         else:
-            type = self.default_schema_type
-            type.update(schema_type)
-            self.schema_type = type
-            self.logger.debug(f"Schema {schema['@type']} does exist. Default got updated for {self.response.url}")
-            return schema
+            type_ = self.default_schema_type
+            type_.update(schema_type)
+            self.schema_type = type_
+            self.logger.debug(f"Schema {self.schema_at_type} does exist. Default got updated for {self.response.url}")
+            return True
 
 
     def __get_news_settings_(self):
         try:
             parsed_uri = urlparse(self.response.url)
             domain = '{uri.netloc}'.format(uri=parsed_uri)
-            settings_import = '.settings.site_selectors.' + self.settings.getdict('NEWS_ORGANISATIONS')[domain]
-            selectors = importlib.import_module(settings_import, package='theglobe')
+            settings_import = '.settings.site_settings.' + self.settings.getdict('NEWS_ORGANISATIONS')[domain]
+            site_settings = importlib.import_module(settings_import, package='theglobe')
+            selectors = site_settings.selectors
+            self.schema_handling = site_settings.schema_handling
         except Exception:
-            self.logger.error(f"Error while setting specified settings for 'domain'", exc_info=True)
+            self.logger.error(f"Loading domain specific settings failed [ {domain} ] [ {self.response.url} ]", exc_info=True)
             return False
         else:
             return selectors
@@ -150,22 +183,9 @@ class DataHandler():
                 value = self.__convert_response_xpath_(key)
             else:
                 value = schema
-                for x in self.schema_type[key]['list']:
-                    try:
-                        value = value[x]
-                    except KeyError:
-                        try:
-                            self.logger.warning(f"{schema['@type']} acces problem [key: {key} -> {x}] Trying if there is a '@list' key.")
-                            new_value = []
-                            for item in value['@list']:
-                                new_value.extend(item[x])
-                            value = new_value
-                        except KeyError:
-                            self.logger.warning(f"{schema['@type']} acces problem [key: {key} -> {x}] No '@list' key found. Using xpath. [ {self.response.url} ]", exc_info=False)
-                            value = self.__convert_response_xpath_(key)
-                            break
-                        else:
-                            self.logger.info(f"{schema['@type']} acces granted through '@list' key.")
+                value = self.__get_schema_value_(key, value)
+                if value == False:
+                    value = self.__convert_response_xpath_(key)
 
             """TODO If this function gets it's date values from the schema.org tag it's not formatted -> Idially this should be done better than here."""
             if key == "publishedAt" or key == "modifiedAt":
@@ -176,196 +196,124 @@ class DataHandler():
         """TODO put a schema check here (pip install schema / pip install jsonschema)"""
         return data
 
+    
+    def __get_schema_value_(self, key, value):
+        length = len(self.schema_type[key]['list'])
+        key_list = self.schema_type[key]['list']
+        try:
+            value = value[key_list[0]]
+        except KeyError:
+            self.logger.warning(f"{self.schema_at_type} acces problem [main key: {key} -> {key_list[0]}] Key doesn't exist. Using xpath. [ {self.response.url} ]", exc_info=False)
+            return False
+        else:
+            try:
+                for x in range(1, length + 1):
+                    value_type = type(value)
+                    if length > x:
+                        if value_type == dict:
+                            try:
+                                value = value[key_list[x]]
+                            except KeyError:
+                                try:
+                                    value = value['@list']
+                                except Exception:
+                                    ''' TODO better error handling here! '''
+                                    self.logger.warning(f"{self.schema_at_type} acces problem [main key: {key} -> {key_list[0:]}] [value: {value}] Using xpath. [ {self.response.url} ]")
+                                    return False
+                                else:
+                                    new_value = []
+                                    for item in value:
+                                        new_value.extend([item[key_list[x]]])
+                                    value = new_value
+                            continue
+                        elif value_type == list:
+                            if type(value[0]) == dict:
+                                new_value = []
+                                for item in value:
+                                    new_value.extend([item[key_list[x]]])
+                                value = new_value
+                                continue
+                            if type(value[0]) == str:
+                                continue
+                            if type(value[0]) == list:
+                                self.logger.warning(f"{self.schema_at_type} acces problem [main key: {key} -> {key_list[0:]}] list in list. [value: {value}] Using xpath. [ {self.response.url} ]")
+                                return False
+                        elif value_type == str:
+                            continue
+                    elif length == x:
+                        if value_type == str:
+                            return value
+                        elif value_type == dict:
+                            self.logger.warning(f"{self.schema_at_type} acces problem [main key: {key} -> {key_list[0:]}] There is a dict but no keys left in schema type. [dict: {value}] Using xpath. [ {self.response.url} ]")
+                            return False
+                        elif value_type == list:
+                            return value
+            except Exception:
+                self.logger.error(f"{self.schema_at_type} Something unexpected went wrong. Using xpath. [main key: {key}] [ {self.response.url} ]", exc_info=True)
+                return False
+
+                
+
 
     def __convert_response_xpath_(self, key):
         """
-        This function calls according to the given key a function saved in the get_func dict.
+        This function calls according to the given key a selector term saved in the get_selectors dict.
             !!! Example:
                 key 'name' gets passed:
-                    get_func has to have same key -> 'name' with value -> _get_name_
+                    get_selector has to have same key -> 'name' with value -> 'NAME_SELECTORS'
         The dict is defined in the __init__ function of this class.
         """
         try:
-            value = self.get_func[key]()
+            selector_term = self.get_selector[key]
+            SELECTORS = self.selectors[selector_term]
         except KeyError:
-            self.logger.error(f"get_func acces Error. No value for {key}", exc_info=True)
-            self.stats.inc_value(f'function_not_found/{key}')
+            self.logger.warning(f"Failure when trying to get selectors [{key}]", exc_info=True)
+            self.stats.inc_value(f'selectors_not_found/{key}')
             return "N/A"
         else:
+            value = self.__get_xpath_value(SELECTORS)
             if value == "N/A":
-                self.logger.info(f"None of the Selectors worked [{key}] [ {self.response.url} ]")
+                self.logger.debug(f"None of the Selectors worked [{key}] [ {self.response.url} ]")
                 self.stats.inc_value(f'no_data_found/{key}')
             return value
 
 
-    def _get_name_(self):
-        """Get the name of the Newspaper."""
-        NAME_SELECTORS = self.selectors.get('NAME_SELECTORS')
-        for item in NAME_SELECTORS:
+    def __get_xpath_value(self, SELECTORS):
+        for item in SELECTORS:
             try:
-                name = self.response.xpath(item).get()
+                value = self.response.xpath(item).get()
             except Exception:
-                continue
+                self.logger.error('Error', exc_info=True)
             else:
-                return name
-        return("N/A")
+                if value == None:
+                    continue
+                else:
+                    return value
+        return('N/A')
 
 
-    def _get_title_(self):
-        """Get the title of the article."""
-        TITLE_SELECTORS = self.selectors.get('TITLE_SELECTORS')
-        for item in TITLE_SELECTORS:
-            try:
-                title = self.response.xpath(item).get()
-            except Exception:
-                continue
-            else:
-                return title
-        return("N/A")
-
-
-    def _get_title_detail_(self):
-        """
-        Get a detailed title of the article.
-        Mostly called "description".
-        """
-        TITLE_DETAIL_SELECTORS = self.selectors.get('TITLE_DETAIL_SELECTORS')
-        for item in TITLE_DETAIL_SELECTORS:
-            try:
-                title_detail = self.response.xpath(item).get()
-            except Exception:
-                continue
-            else:
-                return title_detail
-        return("N/A")
-
-    def _get_author_(self):
-        """
-        Get the author of the article.
-        This can sometimes be a bit tricky:
-        BBC only has itself as author of the article.
-        """
-        AUTHOR_SELECTORS = self.selectors.get('AUTHOR_SELECTORS')
-        for item in AUTHOR_SELECTORS:
-            try:
-                author = self.response.xpath(item).get()
-            except Exception:
-                continue
-            else:
-                return author
-        return("N/A")
-
-    def _get_summary_(self):
-        """
-        Get a summary of the article.
-        Sometimes the articles only have a title and description, but no summary.
-        """
-        SUMMARY_SELECTORS = self.selectors.get('SUMMARY_SELECTORS')
-        for item in SUMMARY_SELECTORS:
-            try:
-                summary = self.response.xpath(item).get()
-            except Exception:
-                continue
-            else:
-                return summary
-        return("N/A")
-
-
-    def _get_content_(self):
-        """
-        Get the whole content of the article.
-        TODO This is still pretty hard to do
-        regarding to the fact that there are many different article types.
-        """
-        return("N/A")
-        CONTENT_SELECTORS = self.selectors.get('CONTENT_SELECTORS')
-        for item in CONTENT_SELECTORS:
-            try:
-                content = self.response.xpath(item).getall()
-                content = ''.join(map(str, content))
-                if content == '':
-                    raise Exception
-            except Exception:
-                continue
-            else:
-                return content
-        return("N/A")
-
-
-    def _get_tags_(self):
-        """
-        Get the keywords/tags.
-        Some websites have keyword/tags regardning to the articles topic.
-        """
-        TAG_SELECTORS = self.selectors.get('TAG_SELECTORS')
-        for item in TAG_SELECTORS:
-            try:
-                tags = self.response.xpath(item).get()
-            except Exception:
-                continue
-            else:
-                return tags
-        return("N/A")
-
-
-    def _get_urlToImg_(self):
-        """
-        Get the main Image of the article.
-        Articles can have more than one picture,
-        but this method only wants to get the main picture.
-        """
-        IMAGE_SELECTORS = self.selectors.get('IMAGE_SELECTORS')
-        for item in IMAGE_SELECTORS:
-            try:
-                url_to_img = self.response.xpath(item).get()
-            except Exception:
-                continue
-            else:
-                return url_to_img
-        return("N/A")
-
-
-    def _get_publishedAt_(self):
-        """
-        Get the published date of the article.
-        Articles can have many different date data.
-        Most important, though, is when the article got published.
-        """
-        PUB_DATE_SELECTORS = self.selectors.get('PUB_DATE_SELECTORS')
-
-        for item in PUB_DATE_SELECTORS:
-            try:
-                response_date = self.response.xpath(item).get()
-            except Exception:
-                continue
-            else:
-                # form_date = self._date_formatter_(response_date)
-                # if form_date:
-                    # return form_date
-                if response_date:
-                    return response_date
-        return("N/A")
-
-
-    def _get_modifiedAt_(self):
-        """
-        Get the modified date of the article.
-        Articles can have many different date data.
-        """
-        MOD_DATE_SELECTORS = self.selectors.get('MOD_DATE_SELECTORS')
-
-        for item in MOD_DATE_SELECTORS:
-            try:
-                response_date = self.response.xpath(item).get()
-            except Exception:
-                continue
-            else:
-                # form_date = self._date_formatter_(response_date)
-                # if form_date:
-                    # return form_date
-                if response_date:
-                    return response_date
-        return("N/A")
+    # def _get_content_(self): # not deleted yet, because to get and format the content is a different proccess
+    #     """
+    #     Get the whole content of the article.
+    #     TODO This is still pretty hard to do
+    #     regarding to the fact that there are many different article types.
+    #     """
+    #     return("N/A")
+    #     CONTENT_SELECTORS = self.selectors.get('CONTENT_SELECTORS')
+    #     for item in CONTENT_SELECTORS:
+    #         try:
+    #             content = self.response.xpath(item).getall()
+    #             content = ''.join(map(str, content))
+    #             if content == '':
+    #                 raise Exception
+    #         except Exception:
+    #             continue
+    #         else:
+    #             if content == None:
+    #                 continue
+    #             else:
+    #                 return content
+    #     return("N/A")
 
 
     def _date_formatter_(self, date, key):
@@ -381,21 +329,3 @@ class DataHandler():
                 return form_date
         self.logger.error(f"Format error [{key}] ('{date}') [ {self.response.url} ]")
         return date
-
-    def _get_embedUrl_(self):
-        return 'N/A'
-
-    def _get_type_(self):
-        """
-        Get the type of the article.
-        Video. Article. etc.
-        """
-        TYPE_SELECTORS = self.settings.getlist('TYPE_SELECTORS')
-        for item in TYPE_SELECTORS:
-            try:
-                type = self.response.xpath(item).get()
-            except Exception:
-                continue
-            else:
-                return type
-        return("N/A")
