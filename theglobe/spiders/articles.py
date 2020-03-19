@@ -21,11 +21,22 @@ class ArticlesSpider(scrapy.Spider):
             self.rm = theglobe.redis.RedisManager(settings, stats)
         """Get URL's from database"""
         self.urls = [
-            "http://rss.cnn.com/rss/edition.rss",
-            "http://feeds.bbci.co.uk/news/rss.xml",
+            'http://feeds.bbci.co.uk/news/england/london/rss.xml',
+            'http://feeds.reuters.com/Reuters/worldNews',
+            'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms',
+            'http://rss.cnn.com/rss/edition.rss',
+            'http://rss.cnn.com/rss/cnn_topstories.rss',
+            'https://www.rt.com/rss/news/',
+            'https://www.latimes.com/world/rss2.0.xml',
+            'https://feeds.a.dj.com/rss/RSSWorldNews.xml',
             'https://elpais.com/rss/elpais/inenglish.xml',
-            # 'http://www.independent.co.uk/news/world/rss',
-            # 'http://feeds.reuters.com/Reuters/worldNews',
+            'https://www.spiegel.de/international/index.rss',
+
+            # 'http://www.aljazeera.com/xml/rss/all.xml', # TODO needs support for Article schema type
+            # 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml', # TODO Not able to get the name - Manuel set of name for very site?
+            # 'http://rssfeeds.usatoday.com/usatoday-NewsTopStories', # TODO BAD SCHEMA AND META
+            # 'https://www.cbc.ca/cmlink/rss-world', # TODO needs configuration from the script, too
+            # 'http://www.independent.co.uk/news/world/rss', # TODO not working at all at the moment
             ]
 
 
@@ -80,4 +91,4 @@ class ArticlesSpider(scrapy.Spider):
             yield article
 
         else:
-            self.logger.error("No data in article document")
+            self.logger.warning("No data in article document")
