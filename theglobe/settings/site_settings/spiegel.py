@@ -1,10 +1,11 @@
-dict = {
-    'NAME_SELECTORS' : ['//meta[@property="og:site_name"]/@content'],
+selectors = {
+    'NAME_SELECTORS' : [
+    ],
     'PUB_DATE_SELECTORS' : [
-        '//meta[@property="rnews:datePublished"]/@content',
-        '//meta[contains(@property, "datePublished")]/@content',
+        '//meta[@name="date"]/@content'
     ],
     'MOD_DATE_SELECTORS' : [
+        '//meta[@name="last-modified"]/@content'
     ],
     'TITLE_SELECTORS' : [
         '//h1/text()',
@@ -18,16 +19,24 @@ dict = {
         '//meta[@property="og:image"]/@content',
     ],
     'AUTHOR_SELECTORS' : [
-        # '//meta[@property="article:author"]/@content' # this will return an url to bbc's facebook
+        '//meta[@name="author"]/@content',
     ],
     'CONTENT_SELECTORS' : [
         '//div[@itemprop = "articleBody"]/descendant::text()[not(ancestor::script)]',
     ],
+    'SECTION_SELECTORS' : [
+    ],
     'TAG_SELECTORS': [
-        '//meta[@property="article:section"]/@content',
-        '//meta[@name="section"]/@content',
+        '//meta[@name="news_keywords"]/@content',
+    ],
+    'TYPE_SELECTORS': [
+        '//meta[@property="og:type"]/@content',
     ],
 }
 
-def get(name):
-    return dict[name]
+schema_handling = {
+    'index': 0, # what script should we looked at
+    'list_check': True, # True if many schemas are in a list
+    'list_index': 0, # if it's a list this should be an int()
+    'fixed_type': 'NEWSARTICLE', # accepted type
+}
