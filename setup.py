@@ -19,7 +19,9 @@ setuptools.setup(
         'colorlog >= 4.1.0',
         'scrapy >= 1.8.0',
         'redis >= 3.4.1',
-        'redisbloom >= 0.3.2'
+        'redisbloom >= 0.3.2',
+        'scrapy_rotating_proxies',
+        'requests'
 
     ],
     classifiers=[

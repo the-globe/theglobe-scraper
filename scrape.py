@@ -13,6 +13,7 @@ import sys, getopt
 
 
 def main(s):
+    theglobe.UpdateProxyList()
     process = CrawlerProcess(s)
     process.crawl(theglobe.ArticlesSpider)
     process.start()
@@ -36,7 +37,6 @@ def check_args(argv):
             if cs:
                 s = cs
                 print(f"Using '{arg}' settings!")
-                
             else:
                 print(f"'{arg}' is not a valid arg!")
                 sys.exit(2)
