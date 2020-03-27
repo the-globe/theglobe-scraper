@@ -33,6 +33,8 @@ REDIS_PASSWORD = ""
 
 # Rotating Scrapy Proxy Settings
 ROTATING_PROXY_LIST_PATH = 'theglobe/settings/proxies.txt'
+ROTATING_PROXY_BACKOFF_BASE = 5
+ROTATING_PROXY_BACKOFF_CAP = 10
 
 TESTING = False
 
