@@ -82,7 +82,7 @@ class DataHandler():
                 self.logger.info(f'No schema found on [ {self.response.url} ] Using default')
                 self.schema_type = self.default_schema_type
                 return None
-            
+
             schema = schema[index]
             try:
                 schema = json.loads(schema)
@@ -196,7 +196,7 @@ class DataHandler():
         """TODO put a schema check here (pip install schema / pip install jsonschema)"""
         return data
 
-    
+
     def __get_schema_value_(self, key, value):
         length = len(self.schema_type[key]['list'])
         key_list = self.schema_type[key]['list']
@@ -218,7 +218,7 @@ class DataHandler():
                                     value = value['@list']
                                 except Exception:
                                     ''' TODO better error handling here! '''
-                                    self.logger.warning(f"{self.schema_at_type} acces problem [main key: {key} -> {key_list[0:]}] [value: {value}] Using xpath. [ {self.response.url} ]")
+                                    self.logger.warning(f"{self.schema_at_type} access problem [main key: {key} -> {key_list[0:]}] [value: {value}] Using xpath. [ {self.response.url} ]")
                                     return False
                                 else:
                                     new_value = []
@@ -236,7 +236,7 @@ class DataHandler():
                             if type(value[0]) == str:
                                 continue
                             if type(value[0]) == list:
-                                self.logger.warning(f"{self.schema_at_type} acces problem [main key: {key} -> {key_list[0:]}] list in list. [value: {value}] Using xpath. [ {self.response.url} ]")
+                                self.logger.warning(f"{self.schema_at_type} access problem [main key: {key} -> {key_list[0:]}] list in list. [value: {value}] Using xpath. [ {self.response.url} ]")
                                 return False
                         elif value_type == str:
                             continue
@@ -244,15 +244,17 @@ class DataHandler():
                         if value_type == str:
                             return value
                         elif value_type == dict:
-                            self.logger.warning(f"{self.schema_at_type} acces problem [main key: {key} -> {key_list[0:]}] There is a dict but no keys left in schema type. [dict: {value}] Using xpath. [ {self.response.url} ]")
+                            self.logger.warning(f"{self.schema_at_type} access problem [main key: {key} -> {key_list[0:]}] There is a dict but no keys left in schema type. [dict: {value}] Using xpath. [ {self.response.url} ]")
                             return False
                         elif value_type == list:
-                            return value
+                            seperator = ", "
+                            seperator.join(value)
+                            return new_value
             except Exception:
                 self.logger.error(f"{self.schema_at_type} Something unexpected went wrong. Using xpath. [main key: {key}] [ {self.response.url} ]", exc_info=True)
                 return False
 
-                
+
 
 
     def __convert_response_xpath_(self, key):
