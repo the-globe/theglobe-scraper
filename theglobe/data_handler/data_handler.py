@@ -14,7 +14,7 @@ class DataHandler():
     This handler uses two methods to convert the responses.
 
     1. Schema.org has consistent schemas companies can implement in their webpages.
-    2. Through the usual scrapy method -> xpath, this handler tries to acces meta tags.
+    2. Through the usual scrapy method -> xpath, this handler tries to access meta tags.
 
     For booth methods there are setting files (settings/) that define schemas or selectors (xpath).
 
@@ -177,7 +177,7 @@ class DataHandler():
 
         First this function gets all keys from the schema_type and loops through them.
             If the value of the key is an empty list ([]) the function will instantly call the xpath converter.
-            Else it tries to acces the schema.org tag of the response with the given values inside the list.
+            Else it tries to access the schema.org tag of the response with the given values inside the list.
                 if that fails the xpath converter is called again. (This should not happen, because the local and response schema_type should be the same)
 
         Important is to understand that this function first tries to get the data for a key from the schema tag from a response.
@@ -212,7 +212,7 @@ class DataHandler():
         except TypeError:
             self.logger.error(f"{self.schema_at_type} Problem with [main key: {key} -> key_list: {key_list}] Using xpath. [ {self.response.url} ]")
         except KeyError:
-            self.logger.warning(f"{self.schema_at_type} acces problem [main key: {key} -> {key_list[0]}] Key doesn't exist. Using xpath. [ {self.response.url} ]", exc_info=False)
+            self.logger.warning(f"{self.schema_at_type} access problem [main key: {key} -> {key_list[0]}] Key doesn't exist. Using xpath. [ {self.response.url} ]", exc_info=False)
             return False
         else:
             try:

@@ -26,6 +26,7 @@ MONGO_DATABASE = 'tg'
 MONGO_COLLECTION = 'articles-v0-1-0'
 
 # Redis Server Settings
+REDIS_ENABLED = False #boolean
 REDIS_HOST = "rdwc.de"
 REDIS_PORT = 6379
 REDIS_PASSWORD = ""
