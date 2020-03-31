@@ -17,7 +17,7 @@ class ArticlesSpider(scrapy.Spider):
         super(ArticlesSpider, self).__init__(*args, **kwargs)
         self.stats = stats
         self.settings = settings
-        if not settings.get('TESTING') or not settings.get('REDIS_ENABLED'):
+        if not settings.get('TESTING') and settings.get('REDIS_ENABLED'):
             self.rm = theglobe.redis.RedisManager(settings, stats)
         """Get URL's from database"""
         self.urls = self.settings.getlist('URLS')
@@ -51,7 +51,7 @@ class ArticlesSpider(scrapy.Spider):
 
             article_url = article.xpath(CONTENT_LINK).extract_first()
 
-            if not self.settings.get('TESTING') or not self.settings.get('REDIS_ENABLED'):
+            if not self.settings.get('TESTING') and self.settings.get('REDIS_ENABLED'):
                 if self.rm._bf_check_url_pres_(article_url):
                     continue
                 else:
