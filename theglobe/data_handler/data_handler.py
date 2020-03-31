@@ -248,7 +248,7 @@ class DataHandler():
                             return False
                         elif value_type == list:
                             seperator = ", "
-                            seperator.join(value)
+                            new_value = seperator.join(value)
                             return new_value
             except Exception:
                 self.logger.error(f"{self.schema_at_type} Something unexpected went wrong. Using xpath. [main key: {key}] [ {self.response.url} ]", exc_info=True)
