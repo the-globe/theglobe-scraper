@@ -37,11 +37,11 @@ class DataHandler():
         self.selectors = copy.deepcopy(self.settings.getdict('DEFAULT_SELECTORS')) # empty lists for xpath and schema_org
         self.selectors_xpath_key = self.settings.get("XPATH_KEY")
         self.selectors_schema_org_key = self.settings.get("SCHEMA_ORG_KEY")
+        self.keys = self.selectors.keys()
 
 
     def _get_all_data_(self):
         """accesed by spider.articles.py"""
-        self.keys = self.selectors.keys()
         if self.__get_site_settings_() == False:
             self.logger.warning("__get_site_settings_() returned False")
             return False
