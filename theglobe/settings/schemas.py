@@ -1,136 +1,41 @@
-DEFAULT = {
-    'name': {
-        'list': []
-    },
-    'title': {
-        'list': []
-    },
-    'title_detail': {
-        'list': []
-    },
-    'author': {
-        'list': []
-    },
-    # 'content': {
-    #     'list': []
-    # },
-    'urlToImg': {
-        'list': []
-    },
-    'publishedAt': {
-        'list': []
-    },
-    'modifiedAt': {
-        'list': []
-    },
-    'type': {
-        'list': [
-            #'@type',
-        ]
-    },
-    'tags': {
-        'list': []
-    },
-    'section': {
-        'list': []
-    }
-}
 WEBPAGE = {
-    'name': {
-        'list': ['publisher']
-    }
+    'name':  ['publisher']
 }
 REPORTAGENEWSARTICLE = {
-    'name': {
-        'list': ["publisher","name"]
-    },
-    'author': {
-        'list': ['author', 'name']
-    },
-    'urlToImg': {
-        'list': ['image', 'url']
-    },
-    'publishedAt': {
-        'list': ['datePublished']
-    },
-    'modifiedAt': {
-        'list': ['dateModified']
-    }
+    'name':  ["publisher","name"],
+    'author':  ['author', 'name'],
+    'urlToImg':  ['image', 'url'],
+    'publishedAt':  ['datePublished'],
+    'modifiedAt':  ['dateModified']
 }
 BACKGROUNDNEWSARTICLE = {
-    'name': {
-        'list': ["publisher","name"]
-    },
-    'author': {
-        'list': ['author', 'name']
-    },
-    'title': {
-        'list': ['headline']
-    },
-    'urlToImg': {
-        'list': ['image', 'url']
-    },
-    'publishedAt': {
-        'list': ['datePublished']
-    },
-    'modifiedAt': {
-        'list': ['dateModified']
-    }
+    'name':  ["publisher","name"],
+    'author':  ['author', 'name'],
+    'title':  ['headline'],
+    'urlToImg':  ['image', 'url'],
+    'publishedAt':  ['datePublished'],
+    'modifiedAt':  ['dateModified']
 }
 NEWSARTICLE = {
-    'name': {
-        'list': ["publisher","name"]
-    },
-    'author': {
-        'list': ['author', 'name']
-    },
-    'title': {
-        'list': ['headline']
-    },
-    'urlToImg': {
-        'list': ['image', 'url']
-    },
-    'publishedAt': {
-        'list': ['datePublished']
-    },
-    'modifiedAt': {
-        'list': ['dateModified']
-    }
+    'name':  ["publisher","name"],
+    'author':  ['author', 'name'],
+    'title':  ['headline'],
+    'urlToImg':  ['image', 'url'],
+    'publishedAt':  ['datePublished'],
+    'modifiedAt':  ['dateModified']
 }
 VIDEOOBJECT = {
-    'title': {
-        'list': ['name']
-    },
-    'title_detail': {
-        'list': ['description']
-    },
-    # 'content': {
-    #     'list': ['description']
-    # },
-    'publishedAt': {
-        'list': ['uploadDate']
-    },
-    'embedUrl': {
-        'list': ['embedUrl']
-    }
+    'title':  ['name'],
+    'title_detail':  ['description'],
+    # 'content': ['description'],
+    'publishedAt':  ['uploadDate'],
+    'embedUrl':  ['embedUrl']
 }
 ANALYSISNEWSARTICLE = {
-    'name': {
-        'list': ["publisher","name"]
-    },
-    'author': {
-        'list': ['author', 'name']
-    },
-    'title': {
-        'list': ['headline']
-    },
-    'urlToImg': {
-        'list': ['image', 'url']
-    },
-    'publishedAt': {
-        'list': ['datePublished']
-    },
-    'modifiedAt': {
-        'list': ['dateModified']
-    }
+    'name':  ["publisher","name"],
+    'author':  ['author', 'name'],
+    'title':  ['headline'],
+    'urlToImg':  ['image', 'url'],
+    'publishedAt':  ['datePublished'],
+    'modifiedAt':  ['dateModified']
 }

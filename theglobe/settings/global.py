@@ -108,27 +108,63 @@ ITEM_PIPELINES = {
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
+# Settings for articles spider
 
-SCHEMA_SELECTOR = '//script[@type="application/ld+json"]/text()'
-DATE_FORMATS = [
-        '%Y-%m-%dT%H:%M:%S.%fZ',
-        '%Y-%m-%dT%H:%M:%SZ',
-        '%Y-%m-%dT%H:%M:%S+00:00',
-        '%Y-%m-%d %H:%M:%S',
-        '%Y/%m/%d %H:%M:%S',
-        '%Y-%m-%dT%H:%M:%S%z',
-        '%Y-%m-%d',
-        '%d %b %Y %H:%M %Z',
-        '%Y-%m-%dT%H:%MZ',
+# The Schema selector is always the same
+SCHEMA_ORG_SELECTOR = '//script[@type="application/ld+json"]/text()'
 
-]
-META_SELECTORS = {
-   '@name': '//meta/@name',
-   '@property': '//meta/@property',
-   '@itemprop': '//div/@itemprop'
+# This is the default schema to handle the websites
+DEFAULT_SELECTORS = {
+    'name': {
+        'schema_org': [],
+        'xpath': [],
+    },
+    'title': {
+        'schema_org': [],
+        'xpath': [],
+    },
+    'title_detail': {
+        'schema_org': [],
+        'xpath': [],
+    },
+    'author': {
+        'schema_org': [],
+        'xpath': [],
+    },
+   #  'content': {
+      #   'schema_org': [],
+      #   'xpath': [],
+   #  },
+    'urlToImg': {
+        'schema_org': [],
+        'xpath': [],
+    },
+    'publishedAt': {
+        'schema_org': [],
+        'xpath': [],
+    },
+    'modifiedAt': {
+        'schema_org': [],
+        'xpath': [],
+    },
+    'type': {
+        'schema_org': [],
+        'xpath': [],
+    },
+    'tags': {
+        'schema_org': [],
+        'xpath': [],
+    },
+    'section': {
+        'schema_org': [],
+        'xpath': [],
+    }
 }
+# To get the selector values from above the script needs the key name
+XPATH_KEY = 'xpath'
+SCHEMA_ORG_KEY = 'schema_org'
 
-DEFAULT
+# Different schema_org_types (imported from schemas.py)
 REPORTAGENEWSARTICLE
 BACKGROUNDNEWSARTICLE
 WEBPAGE
@@ -136,8 +172,10 @@ VIDEOOBJECT
 NEWSARTICLE
 ANALYSISNEWSARTICLE
 
+# Settings for each news organisation (imported from site_settings)
 NEWS_ORGANISATIONS = {
    'edition.cnn.com': 'cnn',
+   'www.cnn.com': 'cnn',
    'www.bbc.co.uk': 'bbc',
    'english.elpais.com': 'elpais',
    'elpais.com': 'elpais',
@@ -151,7 +189,43 @@ NEWS_ORGANISATIONS = {
    'eu.usatoday.com' : 'usatoday',
    'www.aljazeera.com': 'aljazeera',
    'www.cbc.ca' : 'cbc',
-
-
 }
 
+# Those are formats to convert string dates to python string type
+DATE_FORMATS = [
+        '%Y-%m-%dT%H:%M:%S.%fZ',
+        '%Y-%m-%dT%H:%M:%SZ',
+        '%Y-%m-%dT%H:%M:%S+00:00',
+        '%Y-%m-%d %H:%M:%S',
+        '%Y/%m/%d %H:%M:%S',
+        '%Y-%m-%dT%H:%M:%S%z',
+        '%Y-%m-%d',
+        '%d %b %Y %H:%M %Z',
+        '%Y-%m-%dT%H:%MZ',
+]
+
+URLS = [
+   # 'http://feeds.bbci.co.uk/news/england/london/rss.xml',
+   # 'http://feeds.reuters.com/Reuters/worldNews',
+   # 'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms',
+   # 'http://rss.cnn.com/rss/edition.rss',
+   # 'http://rss.cnn.com/rss/cnn_topstories.rss',
+   # 'https://www.rt.com/rss/news/',
+   # 'https://www.latimes.com/world/rss2.0.xml',
+   # 'https://feeds.a.dj.com/rss/RSSWorldNews.xml',
+   'https://elpais.com/rss/elpais/inenglish.xml',
+   # 'https://www.spiegel.de/international/index.rss',
+
+   # 'http://www.aljazeera.com/xml/rss/all.xml', # TODO needs support for Article schema type
+   # 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml', # TODO Not able to get the name - Manuel set of name for very site?
+   # 'http://rssfeeds.usatoday.com/usatoday-NewsTopStories', # TODO BAD SCHEMA AND META
+   # 'https://www.cbc.ca/cmlink/rss-world', # TODO needs configuration from the script, too
+   # 'http://www.independent.co.uk/news/world/rss', # TODO not working at all at the moment
+]
+
+
+META_SELECTORS = {
+   '@name': '//meta/@name',
+   '@property': '//meta/@property',
+   '@itemprop': '//div/@itemprop'
+}
