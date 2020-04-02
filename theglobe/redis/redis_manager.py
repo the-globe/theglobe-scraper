@@ -1,7 +1,7 @@
 from redisbloom.client import Client
 import logging
 
-class RedisManager():
+class RedisManager(object):
 
     def __init__(self, settings, stats):
         self.logger = logging.getLogger(__name__)

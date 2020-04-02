@@ -71,6 +71,5 @@ class ArticlesSpider(scrapy.Spider):
             article['score'] = "N/A"
 
             yield article
-
         else:
             self.logger.warning("No data in article document")

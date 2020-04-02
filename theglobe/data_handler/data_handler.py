@@ -5,6 +5,7 @@ import scrapy
 import importlib
 from urllib.parse import urlparse
 import ast
+from bs4 import BeautifulSoup
 import copy
 
 
@@ -53,6 +54,7 @@ class DataHandler():
         if article == False:
             self.logger.warning("__convert_data_() returned False")
             return False
+        article = self.__default_data_(article)
         return article
 
 
@@ -285,29 +287,27 @@ class DataHandler():
         self.stats.inc_value(f'no_data_found/{key}')
         return('N/A')
 
-
-    # def _get_content_(self): # not deleted yet, because to get and format the content is a different proccess
-    #     """
-    #     Get the whole content of the article.
-    #     TODO This is still pretty hard to do
-    #     regarding to the fact that there are many different article types.
-    #     """
-    #     return("N/A")
-    #     CONTENT_SELECTORS = self.selectors.get('CONTENT_SELECTORS')
-    #     for item in CONTENT_SELECTORS:
-    #         try:
-    #             content = self.response.xpath(item).getall()
-    #             content = ''.join(map(str, content))
-    #             if content == '':
-    #                 raise Exception
-    #         except Exception:
-    #             continue
-    #         else:
-    #             if content == None:
-    #                 continue
-    #             else:
-    #                 return content
-    #     return("N/A")
+    def _get_content_(self):
+        CONTENT_SELECTORS = self.selectors.get('CONTENT_SELECTORS')
+        for item in CONTENT_SELECTORS:
+            try:
+                content = self.response.xpath(item).getall()
+                content_soup = BeautifulSoup(content[0], 'html5lib')
+                article_text = content_soup.get_text(strip=True)
+                print(article_text)
+                if content == '':
+                    raise Exception
+                return article_text
+            except Exception as e:
+                self.logger.error(f"There has been an Exception with the content of {self.response.url} : {e}")
+                continue
+            else:
+                if content == None:
+                    continue
+                else:
+                    self.logger.info(f"There has been an unknown Exception while gatherin the article content from {self.response.url}. Passing raw data.")
+                    return content
+        return("N/A")
 
     def _date_formatter_(self, date, key):
         DATE_FORMATS = self.settings.getlist('DATE_FORMATS')
@@ -322,3 +322,11 @@ class DataHandler():
                 return form_date
         self.logger.error(f"Format error [{key}] ('{date}') [ {self.response.url} ]")
         return date
+
+
+    def __default_data_(self, article):
+        article['addedAt'] = datetime.datetime.utcnow()
+        article['score'] = "N/A"
+        article['url'] = self.response.url
+        article['tagged'] = False
+        return article
