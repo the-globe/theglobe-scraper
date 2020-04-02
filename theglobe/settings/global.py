@@ -113,7 +113,7 @@ ITEM_PIPELINES = {
 # The Schema selector is always the same
 SCHEMA_ORG_SELECTOR = '//script[@type="application/ld+json"]/text()'
 
-# This is the default schema to handle the websites
+# This is the default dictionary of selectors to handle the websites -> default = []
 DEFAULT_SELECTORS = {
     'name': {
         'schema_org': [],
@@ -172,7 +172,9 @@ VIDEOOBJECT
 NEWSARTICLE
 ANALYSISNEWSARTICLE
 
-# Settings for each news organisation (imported from site_settings)
+# Settings for each news organisation using domain
+# Key = domain
+# Value = module inside site_settings folder
 NEWS_ORGANISATIONS = {
    'edition.cnn.com': 'cnn',
    'www.cnn.com': 'cnn',

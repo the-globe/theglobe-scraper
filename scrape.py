@@ -36,7 +36,6 @@ def check_args(argv):
             if cs:
                 s = cs
                 print(f"Using '{arg}' settings!")
-                
             else:
                 print(f"'{arg}' is not a valid arg!")
                 sys.exit(2)
@@ -61,16 +60,16 @@ def change_logging_level(s, level):
         return False
 
 
-def change_settings(s, type):
-    if type == 'test':
+def change_settings(s, s_type):
+    if s_type == 'test':
         s['TESTING'] = True
         s['ITEM_PIPELINES'] = {
     'theglobe.pipelines.TheglobePipeline': 350,
     'theglobe.pipelines.JsonWriterPipeline': 500,
         }
-        return s
     else:
         return False
+    return s
 
 
 if __name__ == "__main__":
