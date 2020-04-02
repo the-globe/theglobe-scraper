@@ -297,6 +297,8 @@ class DataHandler():
                 if content == '':
                     raise Exception
                 return article_text
+            except IndexError:
+                continue
             except Exception as e:
                 self.logger.error(f"There has been an Exception with the content of {self.response.url} : {e}")
                 continue
