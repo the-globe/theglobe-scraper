@@ -5,6 +5,7 @@ import scrapy
 import importlib
 from urllib.parse import urlparse
 import ast
+import copy
 
 
 class DataHandler():
@@ -33,61 +34,49 @@ class DataHandler():
         self.settings = settings
         self.stats = stats
         self.response = response
-        self.get_selector = {}
-        self.get_selector['name'] = 'NAME_SELECTORS'
-        self.get_selector['title'] = 'TITLE_SELECTORS'
-        self.get_selector['title_detail'] = 'TITLE_DETAIL_SELECTORS'
-        self.get_selector['author'] = 'AUTHOR_SELECTORS'
-        self.get_selector['summary'] =  'SUMMARY_SELECTORS'
-        self.get_selector['content'] = 'CONTENT_SELECTORS'
-        self.get_selector['section'] = 'SECTION_SELECTORS'
-        self.get_selector['tags'] = 'TAG_SELECTORS'
-        self.get_selector['urlToImg'] = 'IMAGE_SELECTORS'
-        self.get_selector['publishedAt'] = 'PUB_DATE_SELECTORS'
-        self.get_selector['modifiedAt'] = 'MOD_DATE_SELECTORS'
-        self.get_selector['embedUrl'] = 'EMBED_URL_SELECTORS'
-        self.get_selector['type'] = 'TYPE_SELECTORS'
-        self.default_schema_type = self.settings.getdict('DEFAULT')
+        self.selectors = copy.deepcopy(self.settings.getdict('DEFAULT_SELECTORS')) # empty lists for xpath and schema_org
+        self.selectors_xpath_key = self.settings.get("XPATH_KEY")
+        self.selectors_schema_org_key = self.settings.get("SCHEMA_ORG_KEY")
+        self.keys = self.selectors.keys()
 
 
     def _get_all_data_(self):
         """accesed by spider.articles.py"""
-        self.selectors = self.__get_news_settings_()
-        if self.selectors == False:
-            self.logger.warning("__get_news_settings_() returned False")
+        if self.__get_site_settings_() == False:
+            self.logger.warning("__get_site_settings_() returned False")
             return False
-        schema = self.__get_schema_()
-        if schema == False:
-            self.logger.warning("__get_schema_() returned False")
+        schema_org = self.__get_schema_org_()
+        if schema_org == False:
+            self.logger.warning("__get_schema_org_() returned False")
             return False
-        article = self.__convert_data_(schema)
+        article = self.__convert_data_(schema_org)
         if article == False:
             self.logger.warning("__convert_data_() returned False")
             return False
         return article
 
-    def __get_schema_(self):
+
+    def __get_schema_org_(self):
         """
         Private function that tries to get a schema according to schema.org.
         If there is a schema in the given response, it checks it with __check_schema_().
         If there is no schema found the schema_type will be set to DEFAULT (see settings).
         """
-        SCHEMA_SELECTOR = self.settings.get('SCHEMA_SELECTOR')
+        SCHEMA_ORG_SELECTOR = self.settings.get('SCHEMA_ORG_SELECTOR')
         try:
             index = int(self.schema_handling['index'])
             list_check = self.schema_handling['list_check']
 
-            schema = self.response.xpath(SCHEMA_SELECTOR).getall()
+            schema = self.response.xpath(SCHEMA_ORG_SELECTOR).getall()
             if schema == None or schema == []:
                 self.logger.info(f'No schema found on [ {self.response.url} ] Using default')
-                self.schema_type = self.default_schema_type
                 return None
 
             schema = schema[index]
             try:
                 schema = json.loads(schema)
             except Exception:
-                self.logger.warning(f"Couldn't load schema with json url: [ {self.response.url} ]", exc_info=False)
+                self.logger.warning(f"Couldn't load schema with json. url: [ {self.response.url} ]", exc_info=False)
                 raise Exception
             if list_check == True:
                 try:
@@ -98,7 +87,7 @@ class DataHandler():
                 else:
                     list_index = self.schema_handling['list_index']
                     if list_index != None:
-                        schema = schema[list_index] 
+                        schema = schema[list_index]
                     # else:
                     #     self.logger.info(schema)
                     #     for item in schema:
@@ -114,15 +103,15 @@ class DataHandler():
             else:
                 type_is_list = False
         except Exception:
-            self.logger.error(f"schema handling went wrong url [ {self.response.url} ]", exc_info=True)
+            self.logger.error(f"schema handling went wrong. url: [ {self.response.url} ]", exc_info=True)
             return False
         else:
             if type_is_list == True:
                 self.schema_at_type = schema['@type'][0]
             else:
                 self.schema_at_type = schema['@type']
-                self.logger.debug(f"Schema {self.schema_at_type} found in: {self.response.url}")
-            if self.__check_shema_(schema): # Check if schema type exist in settings
+            self.logger.debug(f"Schema {self.schema_at_type} found in: {self.response.url}")
+            if self.__check_shema_org_type_(schema): # Check if schema type exist in settings
                 return schema
             else:
                 return None
@@ -130,37 +119,55 @@ class DataHandler():
         return None
 
 
-    def __check_shema_(self, schema):
+    def __check_shema_org_type_(self, schema):
         """
         This private function checks the given schema on existence in the settings.
-        If this schema doesn't exist it will through a warning and set the schema_type to DEFAULT.
+        If this schema doesn't exist it will throw a warning -> return False.
+        If the type does exist it will add the selectors to self.selectors with add_to_selectors function -> True
         """
-        schema_type = self.settings.getdict(self.schema_at_type.upper())
-        if not schema_type:
+        schema_type_selectors = self.settings.getdict(self.schema_at_type.upper())
+        if not schema_type_selectors:
             self.logger.warning(f"There is no existing Schema sample for the {self.schema_at_type} type. Using default, url: {self.response.url}")
-            self.schema_type = self.default_schema_type
             return False
         else:
-            type_ = self.default_schema_type
-            type_.update(schema_type)
-            self.schema_type = type_
+            self.__add_to_selectors_(self.selectors_schema_org_key, schema_type_selectors)
             self.logger.debug(f"Schema {self.schema_at_type} does exist. Default got updated for {self.response.url}")
             return True
 
 
-    def __get_news_settings_(self):
+    def __get_site_settings_(self):
+        """
+            get site specific settings when applicable.
+            adds xpath_selectors to self.selectors with add_to_selectors function
+            creates self.schema_handling
+        """
         try:
             parsed_uri = urlparse(self.response.url)
             domain = '{uri.netloc}'.format(uri=parsed_uri)
             settings_import = '.settings.site_settings.' + self.settings.getdict('NEWS_ORGANISATIONS')[domain]
             site_settings = importlib.import_module(settings_import, package='theglobe')
-            selectors = site_settings.selectors
+            xpath_selectors = site_settings.xpath_selectors
+            self.__add_to_selectors_(self.selectors_xpath_key, xpath_selectors)
             self.schema_handling = site_settings.schema_handling
         except Exception:
             self.logger.error(f"Loading domain specific settings failed [ {domain} ] [ {self.response.url} ]", exc_info=True)
             return False
         else:
-            return selectors
+            return True
+
+
+    def __add_to_selectors_(self, selector_type, selectors):
+        keys = selectors.keys()
+        try:
+            for key in keys:
+                self.selectors[key].update({selector_type : selectors[key]})
+        except Exception:
+            self.logger.error(f"Couldn't add '{selector_type}' selectors to self.selectors [ {self.response.url} ]", exc_info=True)
+            return False
+        else:
+            return True
+
+
 
 
     def __convert_data_(self, schema=None):
@@ -176,16 +183,14 @@ class DataHandler():
         Important is to understand that this function first tries to get the data for a key from the schema tag from a response.
         When the schema_type is set to DEFAULT every value of a looped key is an empty list -> Hence xpath is called instantly.
         """
-        keys = self.schema_type.keys()
         data = {}
-        for key in keys:
-            if self.schema_type[key]['list'] == []:
-                value = self.__convert_response_xpath_(key)
+        for key in self.keys:
+            if self.selectors[key][self.selectors_schema_org_key] == []:
+                value = self.__get_xpath_value_(key)
             else:
-                value = schema
-                value = self.__get_schema_value_(key, value)
+                value = self.__get_schema_org_value_(key, schema)
                 if value == False:
-                    value = self.__convert_response_xpath_(key)
+                    value = self.__get_xpath_value_(key)
 
             """TODO If this function gets it's date values from the schema.org tag it's not formatted -> Idially this should be done better than here."""
             if key == "publishedAt" or key == "modifiedAt":
@@ -193,23 +198,25 @@ class DataHandler():
                     value = self._date_formatter_(value, key)
             data[key] = value
 
-        """TODO put a schema check here (pip install schema / pip install jsonschema)"""
+        """TODO put a schema check here (pip install schema / pip install jsonschema)""" # can also be done with mongodb
         return data
 
 
-    def __get_schema_value_(self, key, value):
-        length = len(self.schema_type[key]['list'])
-        key_list = self.schema_type[key]['list']
+    def __get_schema_org_value_(self, key, schema):
+        indices_length = len(self.selectors[key][self.selectors_schema_org_key])
+        key_list = self.selectors[key][self.selectors_schema_org_key]
         try:
-            value = value[key_list[0]]
+            value = schema[key_list[0]]
+        except TypeError:
+            self.logger.error(f"{self.schema_at_type} Problem with [main key: {key} -> key_list: {key_list}] Using xpath. [ {self.response.url} ]")
         except KeyError:
             self.logger.warning(f"{self.schema_at_type} acces problem [main key: {key} -> {key_list[0]}] Key doesn't exist. Using xpath. [ {self.response.url} ]", exc_info=False)
             return False
         else:
             try:
-                for x in range(1, length + 1):
+                for x in range(1, indices_length + 1):
                     value_type = type(value)
-                    if length > x:
+                    if indices_length > x:
                         if value_type == dict:
                             try:
                                 value = value[key_list[x]]
@@ -240,7 +247,7 @@ class DataHandler():
                                 return False
                         elif value_type == str:
                             continue
-                    elif length == x:
+                    elif indices_length == x:
                         if value_type == str:
                             return value
                         elif value_type == dict:
@@ -255,42 +262,25 @@ class DataHandler():
                 return False
 
 
-
-
-    def __convert_response_xpath_(self, key):
-        """
-        This function calls according to the given key a selector term saved in the get_selectors dict.
-            !!! Example:
-                key 'name' gets passed:
-                    get_selector has to have same key -> 'name' with value -> 'NAME_SELECTORS'
-        The dict is defined in the __init__ function of this class.
-        """
+    def __get_xpath_value_(self, key):
         try:
-            selector_term = self.get_selector[key]
-            SELECTORS = self.selectors[selector_term]
+            SELECTORS = self.selectors[key][self.selectors_xpath_key]
         except KeyError:
             self.logger.warning(f"Failure when trying to get selectors [{key}]", exc_info=True)
             self.stats.inc_value(f'selectors_not_found/{key}')
-            return "N/A"
         else:
-            value = self.__get_xpath_value(SELECTORS)
-            if value == "N/A":
-                self.logger.debug(f"None of the Selectors worked [{key}] [ {self.response.url} ]")
-                self.stats.inc_value(f'no_data_found/{key}')
-            return value
-
-
-    def __get_xpath_value(self, SELECTORS):
-        for item in SELECTORS:
-            try:
-                value = self.response.xpath(item).get()
-            except Exception:
-                self.logger.error('Error', exc_info=True)
-            else:
-                if value == None:
-                    continue
+            for item in SELECTORS:
+                try:
+                    value = self.response.xpath(item).get()
+                except Exception:
+                    self.logger.error('Error', exc_info=True)
                 else:
-                    return value
+                    if value == None:
+                        continue
+                    else:
+                        return value
+            self.logger.debug(f"None of the Selectors worked [{key}] [ {self.response.url} ]")
+        self.stats.inc_value(f'no_data_found/{key}')
         return('N/A')
 
 
