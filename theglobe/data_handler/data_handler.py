@@ -294,7 +294,6 @@ class DataHandler():
                 content = self.response.xpath(item).getall()
                 content_soup = BeautifulSoup(content[0], 'html5lib')
                 article_text = content_soup.get_text(strip=True)
-                print(article_text)
                 if content == '':
                     raise Exception
                 return article_text
