@@ -23,7 +23,7 @@ LOG__LEVEL = 'INFO' # Attention! This is not the usual LOG_LEVEL variable for sc
 # MongoDB Settings
 MONGO_URL = 'mongodb://rdwc.de:27017/'
 MONGO_DATABASE = 'tg'
-MONGO_COLLECTION = 'articles-v0-1-0'
+MONGO_COLLECTION = 'articles-testing'
 
 # Redis Server Settings
 REDIS_ENABLED = False #boolean

@@ -329,5 +329,6 @@ class DataHandler():
         article['addedAt'] = datetime.datetime.utcnow()
         article['score'] = "N/A"
         article['url'] = self.response.url
+        article['tags_raw'] = ""
         article['tagged'] = False
         return article
