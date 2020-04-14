@@ -28,7 +28,8 @@ xpath_selectors = {
         '//meta[@property="og:author"]/@content'
     ],
     # 'content' : [
-    #     '//div[@itemprop = "articleBody"]/descendant::text()[not(ancestor::script)]',
+    #   '//div[contains(@itemprop, "articleBody")]',
+    #   '//div[contains(@class, "StandardArticleBody_body")]',
     # ],
     'section' : [
         '//meta[@property="og:article:section"]/@content',

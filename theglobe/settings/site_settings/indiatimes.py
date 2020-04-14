@@ -21,7 +21,8 @@ xpath_selectors = {
         # India Times has no author
     ],
     # 'content' : [
-    #     '//div[@itemprop = "articleBody"]/descendant::text()[not(ancestor::script)]', # This would not work for India Times
+    #    '//div[contains(@itemprop, "articleBody")]', # This would not work for India Times
+    #    '//div[contains(@class, "_3WlLe clearfix")]',
     # ],
     'section': [
     ],

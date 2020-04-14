@@ -29,7 +29,7 @@ class __TagScraper__(object):
         client = MongoClient(self.MONGO_URL)
         db = client[self.MONGO_DATABASE]
         collection = db[self.MONGO_COLLECTION]
-        cursor = collection.find({"tagged": False, "content": { "$ne": "N/A"}})
+        cursor = collection.find({"tagged": False, "content": { "$nin": ["", "N/A"]}})
 
         for article in cursor:
             if len(article['content']) > 5000:

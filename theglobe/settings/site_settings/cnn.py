@@ -24,11 +24,14 @@ xpath_selectors = {
         '//meta[@name="author"]/@content',
         '//meta[@property="og:author"]/@content'
     ],
-    # 'content' : [
-    #     '//div[@itemprop = "articleBody"]/descendant::text()[not(ancestor::script)]',
-    # ],
-    'section' : [
-        '//meta[@name="section"]/@content',
+    # 'content': [
+        #    '//div[contains(@class, "l-container")]',
+        #    '//div[contains(@class, "pg-rail-tall__body")]',
+        #   '//div[contains(@itemprop, "articleBody")]',
+        #   '//meta[@name="section"]/@content',
+   # ],
+    'section': [
+           '//meta[@name="section"]/@content',
     ],
     'tags': [
         '//meta[@name="keywords"]/@content',

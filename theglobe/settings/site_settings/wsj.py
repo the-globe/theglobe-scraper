@@ -24,7 +24,8 @@ xpath_selectors = {
         '//meta[@property="article:author"]/@content',
     ],
     # 'content' : [
-    #     '//div[@itemprop = "articleBody"]/descendant::text()[not(ancestor::script)]',
+    #   #REQUIRES LOGIN OR SUBSCRIPTION BUT COMES WITH SUFFICIENT TAGS
+    #   '//div[@itemprop = "articleBody"]/descendant::text()[not(ancestor::script)]',
     # ],
     'section' : [
         '//meta[@property="og:section"]/@content',

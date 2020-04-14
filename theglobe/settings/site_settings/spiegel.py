@@ -22,7 +22,8 @@ xpath_selectors = {
         '//meta[@name="author"]/@content',
     ],
     # 'content' : [
-    #     '//div[@itemprop = "articleBody"]/descendant::text()[not(ancestor::script)]',
+    #    '//div[contains(@class, "clearfix")]',
+    #    '//div[contains(@class, "ArticlePage-articleContainer")]',
     # ],
     'section' : [
     ],

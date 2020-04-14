@@ -21,9 +21,11 @@ xpath_selectors = {
         # '//meta[@property="article:author"]/@content' # this will return an url to bbc's facebook
     ],
     # 'content' : [
-    #     '//div[@itemprop = "articleBody"]/descendant::text()[not(ancestor::script)]',
-    # ],
-    'section' : [
+    #    '//div[contains(@class, "story-body__inner")]/*[not(self::figure)]',
+    #    '//div[contains(@property, "articleBody")]/*[not(self::figure)]'
+    #    '//div[contains(@itemprop, "articleBody")]',
+    #]
+    'section': [
         '//meta[@property="article:section"]/@content',
         '//meta[@name="section"]/@content',
     ],
