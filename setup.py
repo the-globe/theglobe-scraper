@@ -5,14 +5,14 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="scraper",
+    name="theglobe-scraper",
     version="0.0.1",
     author="Santiago Martinez-Avial, Marvin Willms",
     author_email="santiago.martinez@code.berlin, marvin.willms@code.berlin",
     description="A package for scraping and inserting News to a MongoDB",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Mavial/theglobescraper",
+    url="https://github.com/Mavial/theglobe-scraper",
     packages=setuptools.find_packages(),
     install_requires=[
         'pymongo >= 3.10.1',
