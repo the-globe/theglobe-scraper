@@ -8,6 +8,7 @@ import scrapy
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 import sys, getopt
+import os
 
 
 
@@ -73,6 +74,7 @@ def change_settings(s, s_type):
 
 
 if __name__ == "__main__":
+    os.environ['SCRAPY_SETTINGS_MODULE'] = 'theglobe.settings.global'
     try:
         s = check_args(sys.argv[1:])
         if s == None:
