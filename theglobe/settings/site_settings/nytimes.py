@@ -1,36 +1,36 @@
-selectors = {
-    'NAME_SELECTORS' : [
+xpath_selectors = {
+    'name' : [
     ],
-    'PUB_DATE_SELECTORS' : [
+    'publishedAt' : [
         '//meta[@property="article:published"]/@content'
     ],
-    'MOD_DATE_SELECTORS' : [
+    'modifiedAt' : [
         '//meta[@property="article:modified"]/@content'
     ],
-    'TITLE_SELECTORS' : [
+    'title' : [
         '//h1/text()',
         '//meta[@property="og:title"]/@content',
     ],
-    'TITLE_DETAIL_SELECTORS' : [
+    'title_detail' : [
         '//meta[@property="og:description"]/@content',
         '//meta[@name="description"]/@content',
     ],
-    'IMAGE_SELECTORS' : [
+    'urlToImg' : [
         '//meta[@property="og:image"]/@content',
     ],
-    'AUTHOR_SELECTORS' : [
+    'author' : [
         '//meta[@name="byl"]/@content',
     ],
-    'CONTENT_SELECTORS' : [
-        '//div[@itemprop = "articleBody"]/descendant::text()[not(ancestor::script)]',
-    ],
-    'SECTION_SELECTORS' : [
+    # 'content' : [
+    #     '//div[@itemprop = "articleBody"]/descendant::text()[not(ancestor::script)]',
+    # ],
+    'section' : [
         '//meta[@property="article:section"]/@content',
     ],
-    'TAG_SELECTORS': [
+    'tags': [
         '//meta[@name="news_keywords"]/@content',
     ],
-    'TYPE_SELECTORS': [
+    'type': [
         '//meta[@property="og:type"]/@content',
     ],
 }

@@ -1,32 +1,32 @@
-selectors = {
-    'NAME_SELECTORS' : [
+xpath_selectors = {
+    'name' : [
         '//meta[@property="og:site_name"]/@content',
     ],
-    'PUB_DATE_SELECTORS' : [
+    'publishedAt' : [
     ],
-    'MOD_DATE_SELECTORS' : [
+    'modifiedAt' : [
     ],
-    'TITLE_SELECTORS' : [
+    'title' : [
         '//h1/text()',
         '//meta[@property="og:title"]/@content',
     ],
-    'TITLE_DETAIL_SELECTORS' : [
+    'title_detail' : [
         '//meta[@property="og:description"]/@content',
         '//meta[@name="description"]/@content'
     ],
-    'IMAGE_SELECTORS' : [
+    'urlToImg' : [
         '//meta[@property="og:image"]/@content'
     ],
-    'AUTHOR_SELECTORS' : [
+    'author' : [
     ],
-    'CONTENT_SELECTORS' : [
-        '//div[@itemprop = "articleBody"]/descendant::text()[not(ancestor::script)]',
+    # 'content' : [
+    #     '//div[@itemprop = "articleBody"]/descendant::text()[not(ancestor::script)]',
+    # ],
+    'section' : [
     ],
-    'SECTION_SELECTORS' : [
+    'tags': [
     ],
-    'TAG_SELECTORS': [
-    ],
-    'TYPE_SELECTORS': [
+    'type': [
         '//meta[@property="og:type"]/@content'
     ],
 }

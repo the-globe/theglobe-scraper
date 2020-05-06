@@ -1,40 +1,40 @@
-selectors = {
-    'NAME_SELECTORS' : ['//meta[@property="og:site_name"]/@content'],
-    'PUB_DATE_SELECTORS' : [
+xpath_selectors = {
+    'name' : ['//meta[@property="og:site_name"]/@content'],
+    'publishedAt' : [
         '//meta[@property="og:pubdate"]/@content',
         '//meta[@property="article:published_time"]/@content',
         '//meta[@name="pubdate"]/@content',
     ],
-    'MOD_DATE_SELECTORS' : [
+    'modifiedAt' : [
         '//meta[contains(@property, "article:modified_time")]/@content',
         '//meta[@name="lastmod"]/@content',
     ],
-    'TITLE_SELECTORS' : [
+    'title' : [
         '//h1/text()',
         '//meta[@property="og:title"]/@content',
     ],
-    'TITLE_DETAIL_SELECTORS' : [
+    'title_detail' : [
         '//meta[@property="og:description"]/@content',
         '//meta[@name="description"]/@content'
     ],
-    'IMAGE_SELECTORS' : [
+    'urlToImg' : [
         '//meta[@property="og:image"]/@content'
     ],
-    'AUTHOR_SELECTORS' : [
+    'author' : [
         '//meta[@name="author"]/@content',
         '//meta[@property="og:author"]/@content'
     ],
-    'CONTENT_SELECTORS' : [
-        '//div[@itemprop = "articleBody"]/descendant::text()[not(ancestor::script)]',
-    ],
-    'SECTION_SELECTORS' : [
+    # 'content' : [
+    #     '//div[@itemprop = "articleBody"]/descendant::text()[not(ancestor::script)]',
+    # ],
+    'section' : [
         '//meta[@name="section"]/@content',
     ],
-    'TAG_SELECTORS': [
+    'tags': [
         '//meta[@name="keywords"]/@content',
         '//meta[@itemprop="keywords"]/@content',
     ],
-    'TYPE_SELECTORS': [
+    'type': [
         '//meta[@property="og:type"]/@content',
     ],
 }

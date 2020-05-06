@@ -69,7 +69,6 @@ class ArticlesSpider(scrapy.Spider):
         if article:
             article['addedAt'] = datetime.datetime.utcnow()
             article['score'] = "N/A"
-            article['url'] = response.url
 
             yield article
 

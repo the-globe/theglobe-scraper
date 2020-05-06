@@ -1,35 +1,35 @@
-selectors = {
-    'NAME_SELECTORS' : [
+xpath_selectors = {
+    'name' : [
     ],
-    'PUB_DATE_SELECTORS' : [
+    'publishedAt' : [
         '//meta[@name="date"]/@content'
     ],
-    'MOD_DATE_SELECTORS' : [
+    'modifiedAt' : [
         '//meta[@name="last-modified"]/@content'
     ],
-    'TITLE_SELECTORS' : [
+    'title' : [
         '//h1/text()',
         '//meta[@property="og:title"]/@content',
     ],
-    'TITLE_DETAIL_SELECTORS' : [
+    'title_detail' : [
         '//meta[@property="og:description"]/@content',
         '//meta[@name="description"]/@content',
     ],
-    'IMAGE_SELECTORS' : [
+    'urlToImg' : [
         '//meta[@property="og:image"]/@content',
     ],
-    'AUTHOR_SELECTORS' : [
+    'author' : [
         '//meta[@name="author"]/@content',
     ],
-    'CONTENT_SELECTORS' : [
-        '//div[@itemprop = "articleBody"]/descendant::text()[not(ancestor::script)]',
+    # 'content' : [
+    #     '//div[@itemprop = "articleBody"]/descendant::text()[not(ancestor::script)]',
+    # ],
+    'section' : [
     ],
-    'SECTION_SELECTORS' : [
-    ],
-    'TAG_SELECTORS': [
+    'tags': [
         '//meta[@name="news_keywords"]/@content',
     ],
-    'TYPE_SELECTORS': [
+    'type': [
         '//meta[@property="og:type"]/@content',
     ],
 }

@@ -309,10 +309,6 @@ class DataHandler():
     #                 return content
     #     return("N/A")
 
-    def _fix_broken_urls_(self):
-        url = self.response
-
-
     def _date_formatter_(self, date, key):
         DATE_FORMATS = self.settings.getlist('DATE_FORMATS')
         if date == None:
