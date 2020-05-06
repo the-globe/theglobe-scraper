@@ -197,6 +197,8 @@ class DataHandler():
                 if value != "N/A":
                     value = self._date_formatter_(value, key)
             data[key] = value
+            if key == "url" and value == "N/A":
+                value = self.response.url
 
         """TODO put a schema check here (pip install schema / pip install jsonschema)""" # can also be done with mongodb
         return data
@@ -306,6 +308,9 @@ class DataHandler():
     #             else:
     #                 return content
     #     return("N/A")
+
+    def _fix_broken_urls_(self):
+        url = self.response
 
 
     def _date_formatter_(self, date, key):

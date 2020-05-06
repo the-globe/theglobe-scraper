@@ -135,6 +135,10 @@ DEFAULT_SELECTORS = {
       #   'schema_org': [],
       #   'xpath': [],
    #  },
+    'url': {
+        'schema_org': [],
+        'xpath': [],
+    },
     'urlToImg': {
         'schema_org': [],
         'xpath': [],
@@ -208,14 +212,14 @@ DATE_FORMATS = [
 
 URLS = [
    # 'http://feeds.bbci.co.uk/news/england/london/rss.xml',
-   # 'http://feeds.reuters.com/Reuters/worldNews',
+   'http://feeds.reuters.com/Reuters/worldNews',
    # 'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms',
    # 'http://rss.cnn.com/rss/edition.rss',
    # 'http://rss.cnn.com/rss/cnn_topstories.rss',
    # 'https://www.rt.com/rss/news/',
    # 'https://www.latimes.com/world/rss2.0.xml',
    # 'https://feeds.a.dj.com/rss/RSSWorldNews.xml',
-   'https://elpais.com/rss/elpais/inenglish.xml',
+   # 'https://elpais.com/rss/elpais/inenglish.xml',
    # 'https://www.spiegel.de/international/index.rss',
 
    # 'http://www.aljazeera.com/xml/rss/all.xml', # TODO needs support for Article schema type
