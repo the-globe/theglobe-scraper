@@ -5,6 +5,7 @@ The Globe Scraper is a python written news crawler based on the [Scrapy](https:/
 1. [ Description ](#desc)
 2. [ Tech ](#tech)
    1. [ Data Flow ](#dataflow)
+   2. [ Database (MongoDB) ](#database)
 3. [Quick Start](#quickstart)
     1. [ Development ](#dev)
     2. [ Deployment ](#deploy)
@@ -34,7 +35,7 @@ The Globe Scraper uses the following open source libraries:
 
 [Read more](https://github.com/Mavial/theglobe-scraper/blob/master/doc/data_flow_of_the_scraper.pdf)
 
-### 2.2 Database <a name="database"></a>
+### 2.2 Database (MongoDB) <a name="database"></a>
 <p align='center'>
 <a><img width='50%' src='https://github.com/Mavial/theglobe-scraper/blob/master/doc/the_globe_database_diagram.png'></a>
 </p>
